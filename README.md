@@ -129,11 +129,19 @@ npm start
 ## Notes
 
 - **PWA / QR:** the app has a web manifest, app icons, install prompt, a limited offline shell, and a public-site QR endpoint. The QR is enabled only when the host has an HTTPS URL (`RENDER_EXTERNAL_URL` on Render or `MESSMATE_PUBLIC_URL` elsewhere). Dashboard data and API responses are never cached; bookings and check-ins still need a live connection.
-- **Render + MongoDB Atlas deployment:** push the project to a private Git repository, create an Atlas database user with access to a dedicated `messplanner` database, and restrict Atlas network access to the hosting service's allowed outbound addresses. In Render, create a Blueprint from `render.yaml`, provide the `MONGODB_URI` and a one-time bootstrap admin ID/password, then deploy. Render generates the stable QR signing key. Remove the bootstrap secrets after verifying first sign-in. Set `MESSMATE_PUBLIC_URL` only when using a custom domain or a host other than Render. See [Render's Node/Express deployment guide](https://render.com/docs/deploy-node-express-app), [Render environment-variable guidance](https://render.com/docs/configure-environment-variables), and [MongoDB Atlas connection setup](https://www.mongodb.com/docs/atlas/connect-to-database-deployment/).
 - **Security:** Helmet supplies common security headers, production uses HTTPS-only cookies and HSTS, JSON input is size-limited, API responses are `no-store`, `/api/health` checks MongoDB readiness, and static hosting is limited to public pages plus the `assets`, `css`, `js`, and `vendor` folders. `npm audit` reports the dependency tree at zero known vulnerabilities at the last check. A strict Content Security Policy is not enabled yet because existing pages use inline event handlers; refactor those handlers before adding CSP. The rate limiter uses per-process memory, so configure a shared store before running multiple service instances.
 - **Deployment cost:** the included Render Blueprint uses the Free plan for a low-cost academic demo; check Render's current plan limits before relying on it for continuous availability.
 - The project is intended for academic and classroom demonstration use.
 - MongoDB must be available for persistent data operations.
+
+## Production Deployment
+
+1. Push the project to the GitHub repository and create a MongoDB Atlas database and database user for the app. Configure Atlas network access so the Render service can reach the cluster; follow your Render plan's outbound-network guidance rather than committing database credentials.
+2. In Render, create a Blueprint from the repository. Render reads `render.yaml`; provide `MONGODB_URI`, `BOOTSTRAP_ADMIN_USER_ID` (4–32 letters, digits, `_` or `-`), and `BOOTSTRAP_ADMIN_PASSWORD` (16–200 characters) as secret environment values. The two bootstrap values must either both be set or both be empty. Render generates the stable `QR_SIGNING_SECRET`.
+3. After the first deployment, verify `/api/health` returns `{"status":"ok","app":"MessMate","database":"connected"}` and sign in with the bootstrap administrator. Then remove both bootstrap environment values from Render; keep the created admin account.
+4. To enable deployments after successful GitHub checks, create a Render deploy hook for the service and add its URL as the `RENDER_DEPLOY_HOOK_URL` repository secret under GitHub **Settings > Secrets and variables > Actions**. The workflow deploys `main` only after the build succeeds. Disable Render's automatic deploy on push when using the hook, so an unchecked deployment does not race the workflow. Until the secret is added, CI succeeds and reports that deployment was skipped.
+
+Never commit `.env` or paste production secrets into source files. Set `MESSMATE_PUBLIC_URL` only for a custom domain or a non-Render host; Render's public URL is detected automatically. See [Render's Node/Express deployment guide](https://render.com/docs/deploy-node-express-app), [Render environment-variable guidance](https://render.com/docs/configure-environment-variables), and [MongoDB Atlas connection setup](https://www.mongodb.com/docs/atlas/connect-to-database-deployment/).
 
 ## License
 
