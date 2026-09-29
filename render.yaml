@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: messmate-campus
+    runtime: node
+    region: singapore
+    plan: free
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: QR_SIGNING_SECRET
+        generateValue: true
+      - key: BOOTSTRAP_ADMIN_USER_ID
+        sync: false
+      - key: BOOTSTRAP_ADMIN_PASSWORD
+        sync: false

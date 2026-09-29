@@ -6,6 +6,7 @@ let walletCurrentBalance = 0;
 let bookingCutoffs = { breakfast: '07:30', lunch: '10:30', snacks: '15:00', dinner: '17:30' };
 let currentQrMeal = '';
 let qrExpiryTimer = null;
+let qrEligibleMeals = new Set();
 let attendanceData = {
     breakfast: 'no',
     lunch: 'no',
@@ -166,6 +167,16 @@ async function showQrPass(meal) {
     modal.style.display = 'flex';
     modal.setAttribute('aria-hidden', 'false');
     if (qrExpiryTimer) clearInterval(qrExpiryTimer);
+    const today = localDateKey(new Date());
+    const selectedDate = document.getElementById('bookingDate').value;
+    if (selectedDate !== today) {
+        countdown.textContent = 'QR passes are only available for a meal booked for today.';
+        return;
+    }
+    if (!qrEligibleMeals.has(meal)) {
+        countdown.textContent = 'Reserve and save this meal for today before requesting a QR pass.';
+        return;
+    }
     try {
         const data = await api('/api/check-ins/qr-pass', {
             method: 'POST',
@@ -369,6 +380,11 @@ async function loadBookings() {
         const { bookings, cutoffs } = await api('/api/bookings/me');
         const date = document.getElementById('bookingDate').value;
         const saved = Object.fromEntries(bookings.filter(row => row.date === date).map(row => [row.meal, row.status]));
+        const isToday = date === localDateKey(new Date());
+        qrEligibleMeals = new Set(isToday
+            ? Object.entries(saved).filter(([, status]) => status === 'booked').map(([meal]) => meal)
+            : []);
+        updateQrPassButtons(date, saved);
         for (const meal of ['breakfast', 'lunch', 'snacks', 'dinner']) {
             attendanceData[meal] = saved[meal] === 'booked' ? 'yes' : 'no';
             selectAttendance(meal, attendanceData[meal]);
@@ -385,6 +401,31 @@ async function loadBookings() {
     } catch (error) {
         document.getElementById('bookingStatus').textContent = error.message;
     }
+}
+
+function updateQrPassButtons(date, saved) {
+    const today = localDateKey(new Date());
+    document.querySelectorAll('.meal-section').forEach(section => {
+        const meal = section.querySelector('h4')?.textContent.trim().toLowerCase();
+        const button = section.querySelector('.qr-pass-btn');
+        if (!meal || !button) return;
+
+        const isToday = date === today;
+        const isBooked = saved[meal] === 'booked';
+        const eligible = isToday && isBooked;
+        const [cutoffHour, cutoffMinute] = String(bookingCutoffs[meal] || '00:00').split(':').map(Number);
+        const cutoffPassed = isToday && new Date().getHours() * 60 + new Date().getMinutes() >= cutoffHour * 60 + cutoffMinute;
+        button.disabled = !eligible;
+        button.textContent = eligible ? 'QR pass' : !isToday ? 'Today only' : cutoffPassed ? 'No booking' : 'Book first';
+        button.title = eligible
+            ? `Generate a QR pass for today's ${meal} booking.`
+            : !isToday
+                ? 'QR passes are only available for bookings on today’s date.'
+                : cutoffPassed
+                    ? `No ${meal} booking was saved before the ${bookingCutoffs[meal]} cutoff.`
+                    : `Reserve and save ${meal} today to generate a QR pass.`;
+        button.setAttribute('aria-label', button.title);
+    });
 }
 
 async function bookingDateChanged() {

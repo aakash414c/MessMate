@@ -817,6 +817,7 @@ textarea {
 
 
 .meal-actions .qr-pass-btn { border-color: #c8d6c6; color: #20543e; background: #f0f4eb; }
+.meal-actions .qr-pass-btn:disabled { opacity: .62; cursor: not-allowed; color: #67756d; background: #eef1ed; }
 .qr-pass-modal { width: min(92vw, 430px); max-height: calc(100vh - 2rem); overflow-y: auto; text-align: center; }
 .qr-pass-modal .close { position: absolute; top: .65rem; right: .85rem; }
 .qr-pass-image { display: block; width: min(280px, 75vw); height: auto; margin: 1rem auto; border: 8px solid #fff; border-radius: 12px; box-shadow: 0 8px 26px rgba(31,57,43,.12); }

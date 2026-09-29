@@ -3,7 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#174b3a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>MessMate - Digital Mess Management</title>
+    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="icon" href="/assets/messmate-mark.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/assets/pwa-icon-192.png">
     <link rel="stylesheet" href="./css/main.css">
     <link rel="stylesheet" href="./css/brand-polish.css">
     <!-- <link rel="stylesheet" href="./css/style.css"> -->
@@ -201,6 +207,16 @@
         <h2 class="section-title">A practical academic prototype</h2>
         <p class="section-subtitle">The project uses role-based access across student, staff, manager and administrator dashboards. Attendance supports short-lived, booking-checked QR passes and manual fallback; notices support optional browser push; wallet fee payments use ledger credits; and real payment transfers require configured provider credentials.</p>
         <div class="hero-buttons"><button class="btn btn-primary" onclick="showLoginModal('student')">Student sign in</button><button class="btn btn-secondary" onclick="showLoginModal('manager')">Manager sign in</button></div>
+        <div class="app-launch-card" id="appLaunchCard">
+            <div>
+                <p class="eyebrow">Made for your phone</p>
+                <h3>Take MessMate with you</h3>
+                <p>Install the responsive website as an app, or scan its QR code after the secure public deployment is configured.</p>
+                <p class="app-launch-note" id="appLaunchNote" role="status" aria-live="polite">The phone QR code will appear when MessMate has a public HTTPS address.</p>
+                <button class="btn btn-primary app-launch-install" id="appLaunchInstall" type="button">Install MessMate</button>
+            </div>
+            <div class="app-launch-qr" id="appLaunchQrWrap" hidden><img id="appLaunchQr" src="" alt="" width="148" height="148"></div>
+        </div>
     </section>
 
     <!-- Footer -->
@@ -279,6 +295,8 @@
 
     <!-- <script src="script.js"></script> -->
     <script src="js/auth.js"></script>
+    <script src="js/motion.js"></script>
+    <script src="js/pwa.js"></script>
 
 </body>
 </html>

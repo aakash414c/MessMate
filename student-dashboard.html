@@ -3,7 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#174b3a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Student Dashboard - MessMate</title>
+    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="icon" href="/assets/messmate-mark.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/assets/pwa-icon-192.png">
     <link rel="stylesheet" href="./css/student-dashboard.css">
     <link rel="stylesheet" href="./css/global-search.css">
     <link rel="stylesheet" href="./css/brand-polish.css">
@@ -82,7 +88,7 @@
                         <div class="meal-actions">
                             <button class="action-btn" onclick="showReview('breakfast')">Review</button>
                             <button class="action-btn" onclick="showMenu('breakfast')">MENU</button>
-                            <button class="action-btn qr-pass-btn" onclick="showQrPass('breakfast')">QR pass</button>
+                            <button class="action-btn qr-pass-btn" type="button" disabled onclick="showQrPass('breakfast')">QR pass</button>
                         </div>
                     </div>
                     <div class="meal-attendance">
@@ -100,7 +106,7 @@
                         <div class="meal-actions">
                             <button class="action-btn" onclick="showReview('lunch')">Review</button>
                             <button class="action-btn" onclick="showMenu('lunch')">MENU</button>
-                            <button class="action-btn qr-pass-btn" onclick="showQrPass('lunch')">QR pass</button>
+                            <button class="action-btn qr-pass-btn" type="button" disabled onclick="showQrPass('lunch')">QR pass</button>
                         </div>
                     </div>
                     <div class="meal-attendance">
@@ -118,7 +124,7 @@
                         <div class="meal-actions">
                             <button class="action-btn" onclick="showReview('snacks')">Review</button>
                             <button class="action-btn" onclick="showMenu('snacks')">MENU</button>
-                            <button class="action-btn qr-pass-btn" onclick="showQrPass('snacks')">QR pass</button>
+                            <button class="action-btn qr-pass-btn" type="button" disabled onclick="showQrPass('snacks')">QR pass</button>
                         </div>
                     </div>
                     <div class="meal-attendance">
@@ -136,7 +142,7 @@
                         <div class="meal-actions">
                             <button class="action-btn" onclick="showReview('dinner')">Review</button>
                             <button class="action-btn" onclick="showMenu('dinner')">MENU</button>
-                            <button class="action-btn qr-pass-btn" onclick="showQrPass('dinner')">QR pass</button>
+                            <button class="action-btn qr-pass-btn" type="button" disabled onclick="showQrPass('dinner')">QR pass</button>
                         </div>
                     </div>
                     <div class="meal-attendance">
@@ -223,5 +229,7 @@
     <script src="js/student-dashboard.js"></script>
     <script src="js/global-search.js"></script>
     <script src="js/push-notifications.js"></script>
+    <script src="js/motion.js"></script>
+    <script src="js/pwa.js"></script>
 </body>
 </html>

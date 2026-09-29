@@ -8,15 +8,19 @@ const Razorpay = require('razorpay');
 const QRCode = require('qrcode');
 const webpush = require('web-push');
 const { rateLimit } = require('express-rate-limit');
+const helmet = require('helmet');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/messplanner';
+const IS_PRODUCTION = process.env.NODE_ENV === 'production';
+const MONGODB_URI = process.env.MONGODB_URI || (IS_PRODUCTION ? '' : 'mongodb://127.0.0.1:27017/messplanner');
 const MESS_MONTHLY_FEE = Number(process.env.MESS_MONTHLY_FEE || 2500);
 const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || '';
 const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || '';
 const DEMO_ACCOUNT_PASSWORD = process.env.DEMO_ACCOUNT_PASSWORD || 'MessMateDemo!2026';
-const QR_SIGNING_SECRET = process.env.QR_SIGNING_SECRET || crypto.randomBytes(32).toString('hex');
+const QR_SIGNING_SECRET = process.env.QR_SIGNING_SECRET || (IS_PRODUCTION ? '' : crypto.randomBytes(32).toString('hex'));
+const BOOTSTRAP_ADMIN_USER_ID = process.env.BOOTSTRAP_ADMIN_USER_ID || '';
+const BOOTSTRAP_ADMIN_PASSWORD = process.env.BOOTSTRAP_ADMIN_PASSWORD || '';
 const VAPID_PUBLIC_KEY = process.env.VAPID_PUBLIC_KEY || '';
 const VAPID_PRIVATE_KEY = process.env.VAPID_PRIVATE_KEY || '';
 const VAPID_SUBJECT = process.env.VAPID_SUBJECT || 'mailto:messmate-admin@example.com';
@@ -29,6 +33,9 @@ const BOOKING_CUTOFFS = {
     snacks: process.env.SNACKS_CUTOFF || '15:00',
     dinner: process.env.DINNER_CUTOFF || '17:30'
 };
+
+if (IS_PRODUCTION && !MONGODB_URI) throw new Error('MONGODB_URI must point to a persistent production MongoDB database.');
+if (IS_PRODUCTION && Buffer.byteLength(QR_SIGNING_SECRET, 'utf8') < 32) throw new Error('Set QR_SIGNING_SECRET to a stable random value with at least 32 bytes in production.');
 
 const defaultMenu = {
     breakfast: '- Poha with Peanuts\n- Bread and Butter\n- Tea/Coffee\n- Banana',
@@ -319,9 +326,40 @@ const paymentRateLimiter = rateLimit({
     message: { message: 'Too many payment attempts. Wait a few minutes and try again.' }
 });
 
+app.disable('x-powered-by');
+if (IS_PRODUCTION) app.set('trust proxy', 1);
+app.use(helmet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false,
+    crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' },
+    strictTransportSecurity: IS_PRODUCTION ? { maxAge: 31536000, includeSubDomains: false } : false
+}));
 app.use(express.json({ limit: '1mb' }));
-app.use(express.static(__dirname));
+for (const directory of ['assets', 'css', 'js', 'vendor']) {
+    app.use(`/${directory}`, express.static(path.join(__dirname, directory), {
+        dotfiles: 'ignore',
+        index: false,
+        maxAge: IS_PRODUCTION ? '1h' : 0
+    }));
+}
+const publicPages = new Map([
+    ['/', 'index.html'], ['/index.html', 'index.html'], ['/signup.html', 'signup.html'],
+    ['/student-dashboard.html', 'student-dashboard.html'], ['/staff-dashboard.html', 'staff-dashboard.html'],
+    ['/manager-dashboard.html', 'manager-dashboard.html'], ['/admin-dashboard.html', 'admin-dashboard.html'],
+    ['/offline.html', 'offline.html'], ['/manifest.webmanifest', 'manifest.webmanifest']
+]);
+app.get([...publicPages.keys()], (req, res) => {
+    const file = publicPages.get(req.path);
+    if (req.path === '/manifest.webmanifest') res.type('application/manifest+json');
+    if (req.path === '/offline.html') res.set('Cache-Control', 'no-cache');
+    res.sendFile(path.join(__dirname, file));
+});
+app.get('/service-worker.js', (req, res) => {
+    res.set('Cache-Control', 'no-cache');
+    res.sendFile(path.join(__dirname, 'service-worker.js'));
+});
 app.use('/api', (req, res, next) => {
+    res.set('Cache-Control', 'no-store');
     res.on('finish', () => {
         const actor = req.activityActor || req.user;
         if (!actor || res.statusCode >= 400 || ['GET', 'HEAD', 'OPTIONS'].includes(req.method)) return;
@@ -339,13 +377,31 @@ app.use('/api', (req, res, next) => {
 
 async function seedDatabase() {
     await User.updateMany({ walletBalance: { $exists: false } }, { $set: { walletBalance: 0 } });
-    for (const user of seedUsers) {
-        const existing = await User.findOne({ userId: user.userId });
-        if (!existing) {
-            await User.create({ ...user, password: await hashPassword(DEMO_ACCOUNT_PASSWORD) });
-        } else if (!String(existing.password).startsWith('scrypt$')) {
-            existing.password = await hashPassword(String(existing.password || DEMO_ACCOUNT_PASSWORD));
-            await existing.save();
+    if (IS_PRODUCTION) {
+        if (Boolean(BOOTSTRAP_ADMIN_USER_ID) !== Boolean(BOOTSTRAP_ADMIN_PASSWORD)) {
+            throw new Error('Set both BOOTSTRAP_ADMIN_USER_ID and BOOTSTRAP_ADMIN_PASSWORD, or leave both empty.');
+        }
+        if (BOOTSTRAP_ADMIN_USER_ID) {
+            if (!/^[A-Za-z0-9_-]{4,32}$/.test(BOOTSTRAP_ADMIN_USER_ID) || BOOTSTRAP_ADMIN_PASSWORD.length < 16 || BOOTSTRAP_ADMIN_PASSWORD.length > 200) {
+                throw new Error('Bootstrap admin needs a 4–32 character ID and a 16–200 character password.');
+            }
+            let admin = await User.findOne({ userId: BOOTSTRAP_ADMIN_USER_ID });
+            if (!admin) {
+                admin = await User.create({ userId: BOOTSTRAP_ADMIN_USER_ID, type: 'admin', password: await hashPassword(BOOTSTRAP_ADMIN_PASSWORD) });
+                console.log('Created the one-time bootstrap administrator account. Remove its bootstrap environment variables after verifying access.');
+            } else if (admin.type !== 'admin') {
+                throw new Error('BOOTSTRAP_ADMIN_USER_ID is already in use by a non-admin account.');
+            }
+        }
+    } else {
+        for (const user of seedUsers) {
+            const existing = await User.findOne({ userId: user.userId });
+            if (!existing) {
+                await User.create({ ...user, password: await hashPassword(DEMO_ACCOUNT_PASSWORD) });
+            } else if (!String(existing.password).startsWith('scrypt$')) {
+                existing.password = await hashPassword(String(existing.password || DEMO_ACCOUNT_PASSWORD));
+                await existing.save();
+            }
         }
     }
 
@@ -683,8 +739,37 @@ async function paymentAdminSummary(month = currentMonthKey()) {
     };
 }
 
+function getPublicAppUrl() {
+    const configuredUrl = process.env.MESSMATE_PUBLIC_URL || process.env.RENDER_EXTERNAL_URL || '';
+    try {
+        const url = new URL(configuredUrl);
+        if (url.protocol !== 'https:' || url.username || url.password || url.pathname !== '/' || url.search || url.hash) return '';
+        return url.origin;
+    } catch {
+        return '';
+    }
+}
+
 app.get('/api/health', (req, res) => {
-    res.json({ status: 'ok', app: 'MessMate', database: 'mongodb' });
+    const connected = mongoose.connection.readyState === 1;
+    res.status(connected ? 200 : 503).json({ status: connected ? 'ok' : 'unavailable', app: 'MessMate', database: connected ? 'connected' : 'disconnected' });
+});
+
+app.get('/api/public-app', (req, res) => {
+    const url = getPublicAppUrl();
+    res.json({ available: Boolean(url), url: url || null });
+});
+
+app.get('/app-qr.png', async (req, res, next) => {
+    const url = getPublicAppUrl();
+    if (!url) return res.status(404).json({ message: 'Set MESSMATE_PUBLIC_URL to a public HTTPS origin to enable the phone QR code.' });
+    try {
+        const image = await QRCode.toBuffer(`${url}/`, { type: 'png', errorCorrectionLevel: 'M', margin: 2, width: 360, color: { dark: '#174b3a', light: '#fffdf8' } });
+        res.set({ 'Cache-Control': 'public, max-age=3600', 'X-Content-Type-Options': 'nosniff' });
+        res.type('png').send(image);
+    } catch (error) {
+        next(error);
+    }
 });
 
 app.post('/api/auth/register', authRateLimiter, async (req, res, next) => {
@@ -2012,10 +2097,6 @@ app.get('/api/payments/admin', requireAuth, requireRole('admin'), async (req, re
     }
 });
 
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
-
 app.use((error, req, res, next) => {
     console.error(error);
     res.status(500).json({ message: 'Server error. Please try again.' });
@@ -2040,8 +2121,8 @@ function formatComplaintDoc(doc) {
 mongoose.connect(MONGODB_URI)
     .then(seedDatabase)
     .then(() => {
-        app.listen(PORT, () => {
-            console.log(`MessMate running at http://localhost:${PORT}`);
+        app.listen(PORT, '0.0.0.0', () => {
+            console.log(`MessMate listening on port ${PORT}`);
             console.log('MongoDB connected.');
         });
     })

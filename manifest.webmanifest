@@ -1,0 +1,16 @@
+{
+  "id": "/",
+  "name": "MessMate Campus Dining",
+  "short_name": "MessMate",
+  "description": "Book campus meals and manage mess operations.",
+  "start_url": "/?source=installed-app",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f6f2e9",
+  "theme_color": "#174b3a",
+  "categories": ["food", "education", "lifestyle"],
+  "icons": [
+    { "src": "/assets/pwa-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/pwa-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
