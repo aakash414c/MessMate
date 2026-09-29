@@ -141,4 +141,4 @@ This project is provided for academic and educational purposes.
 
 ## Author
 
-MessMate project repository.
+Aakash Rana
