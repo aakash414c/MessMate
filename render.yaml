@@ -14,6 +14,12 @@ services:
         sync: false
       - key: QR_SIGNING_SECRET
         generateValue: true
+      - key: VAPID_PUBLIC_KEY
+        sync: false
+      - key: VAPID_PRIVATE_KEY
+        sync: false
+      - key: VAPID_SUBJECT
+        value: mailto:messmate-admin@example.com
       - key: BOOTSTRAP_ADMIN_USER_ID
         sync: false
       - key: BOOTSTRAP_ADMIN_PASSWORD

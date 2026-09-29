@@ -19,7 +19,7 @@
     }
 
     function updateButton() {
-        button.disabled = false;
+        button.disabled = Notification.permission === 'denied' && !subscription;
         button.textContent = subscription ? 'Disable alerts' : 'Enable alerts';
     }
 
@@ -35,16 +35,20 @@
                 subscription = null;
                 status.textContent = 'Browser alerts are disabled on this device.';
             } else {
+                if (Notification.permission === 'denied') {
+                    throw new Error('Notifications are blocked for this site. Change its notification permission to Allow in your browser settings, then reload this page.');
+                }
                 const permission = await Notification.requestPermission();
                 if (permission !== 'granted') throw new Error('Notification permission was not granted.');
-                subscription = await registration.pushManager.subscribe({
+                const newSubscription = await registration.pushManager.subscribe({
                     userVisibleOnly: true,
                     applicationServerKey: decodeApplicationKey(pushConfig.publicKey)
                 });
                 await request('/api/push/subscriptions', {
                     method: 'POST',
-                    body: JSON.stringify({ subscription: subscription.toJSON() })
+                    body: JSON.stringify({ subscription: newSubscription.toJSON() })
                 });
+                subscription = newSubscription;
                 status.textContent = 'Browser alerts are enabled on this device.';
             }
         } catch (error) {
@@ -69,14 +73,18 @@
         try {
             pushConfig = await request('/api/push/config');
             if (!pushConfig.enabled) {
-                status.textContent = 'Push needs VAPID keys configured in the project .env file.';
+                status.textContent = 'Alerts are not configured on this server. Set a matching VAPID public/private key pair, then restart the app.';
                 return;
             }
             registration = await navigator.serviceWorker.register('/service-worker.js');
             subscription = await registration.pushManager.getSubscription();
             if (subscription && Notification.permission !== 'granted') subscription = null;
-            status.textContent = subscription ? 'Browser alerts are enabled on this device.' : 'Get new mess announcements as browser alerts.';
             updateButton();
+            status.textContent = subscription
+                ? 'Browser alerts are enabled on this device.'
+                : Notification.permission === 'denied'
+                    ? 'Notifications are blocked for this site. Change its notification permission to Allow in your browser settings, then reload.'
+                    : 'Get new mess announcements as browser alerts.';
         } catch (error) {
             status.textContent = error.message;
         }

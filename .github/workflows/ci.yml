@@ -26,6 +26,9 @@ jobs:
       - name: Validate server syntax
         run: node --check server.js
 
+      - name: Validate VAPID setup command
+        run: npm run generate-vapid-keys
+
   deploy:
     needs: build
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
