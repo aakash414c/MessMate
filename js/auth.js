@@ -15,16 +15,26 @@ function closeLoginModal() {
     document.getElementById('password').value = '';
 }
 
-function toggleMobileMenu() {
+function toggleMobileMenu(shouldOpen) {
     const navLinks = document.querySelector('.nav-links');
     const toggle = document.querySelector('.nav-toggle');
 
     if (!navLinks || !toggle) return;
 
-    const isOpen = navLinks.classList.toggle('is-open');
+    const isOpen = typeof shouldOpen === 'boolean' ? shouldOpen : !navLinks.classList.contains('is-open');
+    navLinks.classList.toggle('is-open', isOpen);
     toggle.classList.toggle('is-open', isOpen);
     toggle.setAttribute('aria-expanded', String(isOpen));
+    toggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
 }
+
+document.querySelector('.nav-links')?.addEventListener('click', event => {
+    if (event.target.closest('a')) toggleMobileMenu(false);
+});
+
+document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && document.querySelector('.nav-links.is-open')) toggleMobileMenu(false);
+});
 
 window.onclick = function(event) {
     if (event.target === document.getElementById('loginModal')) closeLoginModal();

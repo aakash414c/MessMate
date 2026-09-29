@@ -814,6 +814,9 @@ img {
         padding: 0.75rem;
         flex-direction: column;
         gap: 0;
+        max-height: min(70vh, 28rem);
+        overflow-y: auto;
+        overscroll-behavior: contain;
     }
 
     .nav-links.is-open {
