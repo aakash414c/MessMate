@@ -81,7 +81,7 @@ The project contribution is operational integration rather than one isolated fea
 ## 3.1 Feasibility
 **Operational:** Workflows follow campus roles. Students manage meal choices and records; staff update service records; managers maintain operations; administrators provision access. Staff can scan short-lived signed meal passes with a browser camera; booking-checked manual check-in remains a fallback.
 
-**Technical:** The application uses Node.js, Express, Mongoose, MongoDB and modular HTML, CSS and JavaScript. REST-style JSON endpoints separate browser interaction from server persistence and authorization. Node.js 18+ and a reachable MongoDB instance are required.
+**Technical:** The application uses Node.js, Express, Mongoose, MongoDB and modular HTML, CSS and JavaScript. REST-style JSON endpoints separate browser interaction from server persistence and authorization. Node.js 20.19+ and a reachable MongoDB instance are required.
 
 **Economic and environmental:** A digital workflow may reduce paper logs and manual aggregation. Booking and inventory records can help plan meal quantities and purchasing. Benefits have not been quantified in a controlled deployment and are not guaranteed outcomes.
 
@@ -217,7 +217,7 @@ Staff and managers publish in-app announcements; students can mark them read. Wi
 | Area | Technology / approach |
 |---|---|
 | Frontend | HTML5, CSS3, modular vanilla JavaScript, responsive layouts, charts and browser-camera QR scanning. |
-| Backend | Node.js 18+ and Express.js 4 REST-style JSON routes. |
+| Backend | Node.js 20.19+ and Express.js 4 REST-style JSON routes. |
 | Database | MongoDB via Mongoose; persisted flows require a reachable database. |
 | Authentication | Salted scrypt hashes, hashed opaque session tokens and HTTP-only cookies; auth and payment endpoints have request limits. |
 | Attendance | Signed, expiring QR passes and browser-camera scanning with booking-checked manual fallback. |
@@ -267,7 +267,7 @@ Recorded checks support core workflow and access-control behavior in a local dem
 
 # 9. Deployment and User Guide
 ## 9.1 Local setup
-1. Install Node.js 18+ and run MongoDB locally, or obtain a private MongoDB connection string.
+1. Install Node.js 20.19+ and run MongoDB locally, or obtain a private MongoDB connection string.
 2. In the project directory run `npm install`.
 3. Copy `.env.example` to `.env`; set `MONGODB_URI` and replace `DEMO_ACCOUNT_PASSWORD` before first startup.
 4. Run `npm start`. The server waits for MongoDB before serving the app.

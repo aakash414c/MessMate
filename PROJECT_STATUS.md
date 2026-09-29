@@ -28,6 +28,11 @@ The extracted starter included basic Express/Mongoose login, a single current me
 - Updated meal demand estimates to use recent same-weekday booking volumes with recency weighting and observed check-in ratios; without attendance history the interface states its booking-only fallback.
 - Added optional CO₂e estimation to waste entries. A factor and its source are both required; trend summaries and CSV include only sourced estimates and make no avoided-emissions claim.
 - Added per-process request limits to registration/sign-in and payment endpoints.
+- Improved narrow and tablet layouts, especially manager forms, and added scroll reveals that honor the reduced-motion preference. Browser layout checks covered 320px, 360px, 390px, 768px, 1024px, and 1440px on the landing/signup pages and all four dashboards.
+- Added the PWA manifest and icons, install prompt, limited static offline shell, and a public phone QR when an HTTPS deployment URL is configured. API responses and dashboard data are never cached.
+- Added Helmet security headers, HTTPS-only production cookies/HSTS and proxy trust, production database/QR-secret startup checks, optional one-time admin bootstrap, `no-store` API responses, MongoDB-aware health checks, and an allowlist for public static files. Project documents, package metadata, and server source are no longer served as static files.
+- Copied the staff QR scanner library into the explicitly hosted `vendor/` folder instead of exposing `node_modules`.
+- Current `npm audit` reports zero known vulnerabilities. Isolated production-mode checks verified QR generation, bootstrap admin sign-in, absence of seeded demo admin credentials, security headers, and static-file restrictions.
 
 ## Remaining scope and configuration
 
@@ -40,8 +45,8 @@ The extracted starter included basic Express/Mongoose login, a single current me
 ## Remaining deployment and hardware work
 
 - Razorpay server-side verification is implemented, but a provider sandbox transaction still needs valid test credentials.
-- Production HTTPS, host secrets, database network restrictions, and a shared rate-limit store must be configured and checked in the target deployment.
+- The Render Blueprint is prepared, but a private Git remote, persistent Atlas database, production secrets, and a real HTTPS deployment are still needed to publish the site and enable its phone QR. Production use still needs a deployment-specific security review; a strict Content Security Policy is deferred until inline event handlers are refactored, and the current rate limiter uses per-process memory (configure a shared store before horizontal scaling).
 - Physical handheld scanner hardware is not connected or required; the staff dashboard uses a browser camera scanner and retains manual check-in as a fallback. Camera scanning requires localhost or HTTPS and browser camera permission.
 
-Earlier local MongoDB checks covered the existing authentication, booking, menu, complaint, announcement, attendance, inventory, waste, duties and report flows. No new end-to-end checks have been run for the recently added camera QR, wallet fee settlement, image attachments, Web Push, bulk endpoints, purchase-cost exports, or revised forecast. Live Razorpay and production HTTPS/VAPID configuration also remain unverified.
+Earlier local MongoDB checks covered the existing authentication, booking, menu, complaint, announcement, attendance, inventory, waste, duties and report flows. QR check-in was exercised on an isolated in-memory database; live Razorpay payments, live Web Push, actual cloud hosting, and physical-device camera scanning remain unverified.
 
