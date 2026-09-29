@@ -269,9 +269,9 @@ Recorded checks support core workflow and access-control behavior in a local dem
 ## 9.1 Local setup
 1. Install Node.js 20.19+ and run MongoDB locally, or obtain a private MongoDB connection string.
 2. In the project directory run `npm install`.
-3. Copy `.env.example` to `.env`; set `MONGODB_URI` and replace `DEMO_ACCOUNT_PASSWORD` before first startup.
+3. Copy `.env.example` to `.env`; set `MONGODB_URI` and replace `DEMO_ACCOUNT_PASSWORD` before first startup. Run `npm run generate-vapid-keys` to write a stable Web Push key pair to the ignored `.env` file; the command does not print the private key.
 4. Run `npm start`. The server waits for MongoDB before serving the app.
-5. Open `http://localhost:3000`. Use a provisioned account or create a student account.
+5. Open `http://localhost:3000`. Use a provisioned account or create a student account. Allow notifications for the site in browser settings before opting in to alerts.
 
 ## 9.2 Configuration
 | Variable | Purpose | Default / note |
@@ -284,7 +284,7 @@ Recorded checks support core workflow and access-control behavior in a local dem
 | SNACKS_CUTOFF | Snacks cutoff | 15:00 local time |
 | DINNER_CUTOFF | Dinner cutoff | 17:30 local time |
 | QR_SIGNING_SECRET | QR pass signing | Set a stable private value when using multiple instances. |
-| VAPID_PUBLIC_KEY / VAPID_PRIVATE_KEY / VAPID_SUBJECT | Optional browser push | Generate and configure a stable key pair; keep the private key secret. |
+| VAPID_PUBLIC_KEY / VAPID_PRIVATE_KEY / VAPID_SUBJECT | Optional browser push | `npm run generate-vapid-keys` writes a stable local pair to `.env`; in production, set the matching pair as host secrets. Keep the private key secret. |
 | MESS_MONTHLY_FEE | Classroom fee value | INR 2500 |
 | RAZORPAY_KEY_ID / SECRET | Optional provider workflow | Empty until configured with valid credentials. |
 

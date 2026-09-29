@@ -37,7 +37,7 @@ The extracted starter included basic Express/Mongoose login, a single current me
 ## Remaining scope and configuration
 
 - **Wallet:** students can use administrator-entered demo credits to settle a fee in the MessMate ledger. There are no real stored-value funds, student self-service top-ups, transfers, or refunds.
-- **Browser push:** the feature is implemented but needs a stable VAPID key pair, HTTPS or localhost, and each user's explicit browser opt-in before delivery is active.
+- **Browser push:** the feature is implemented; `npm run generate-vapid-keys` creates a stable local pair in ignored `.env`, and the Render Blueprint exposes the matching production variables. HTTPS or localhost and each user's explicit browser opt-in are required. Delivery still needs end-to-end verification; users who previously blocked notifications must allow them in browser site settings.
 - **Bulk management:** bulk updates cover visible duties and complaint records; other record types do not have bulk mutation controls.
 - **Sustainability:** CO₂e trends use manually supplied factors and sources. The application does not choose factors or calculate avoided emissions.
 - **Purchase expenses:** new purchase orders require unit prices; legacy orders created before this field was added remain blank in the expense export.
