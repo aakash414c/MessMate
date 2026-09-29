@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 480" role="img" aria-labelledby="title desc">
+  <title id="title">A colorful campus thali</title>
+  <desc id="desc">Illustrated Indian thali with dal, curry, rice, roti, chutney, and fresh salad.</desc>
+  <ellipse cx="281" cy="420" rx="184" ry="22" fill="#183d31" opacity=".12"/>
+  <circle cx="280" cy="230" r="190" fill="#174b3a"/>
+  <circle cx="280" cy="221" r="177" fill="#fffaf0" stroke="#d6dfd0" stroke-width="7"/>
+  <circle cx="280" cy="221" r="159" fill="none" stroke="#e8d9bd" stroke-width="2"/>
+  <circle cx="198" cy="160" r="54" fill="#f4bd4a" stroke="#e2a832" stroke-width="7"/>
+  <circle cx="198" cy="160" r="41" fill="#e99a2d"/>
+  <path d="M171 164c9-12 19-16 30-12 8 3 15 3 24-3-4 20-18 32-36 31-8 0-14-6-18-16Z" fill="#d96e28"/>
+  <path d="M186 145c7-7 17-8 28-4M195 174c7-5 14-6 22-4" fill="none" stroke="#f5d56e" stroke-linecap="round" stroke-width="4"/>
+  <circle cx="357" cy="157" r="51" fill="#d96942" stroke="#e8d9bd" stroke-width="7"/>
+  <circle cx="346" cy="150" r="8" fill="#7e3029"/><circle cx="365" cy="166" r="9" fill="#7e3029"/><circle cx="374" cy="143" r="7" fill="#7e3029"/>
+  <path d="M338 174c12-7 28-7 42-1" fill="none" stroke="#f7ae79" stroke-linecap="round" stroke-width="4"/>
+  <circle cx="150" cy="275" r="39" fill="#b6c85a" stroke="#e8d9bd" stroke-width="6"/>
+  <path d="M126 277c9-13 16-13 24 0 9-13 16-13 24 0" fill="none" stroke="#63804a" stroke-linecap="round" stroke-width="5"/>
+  <circle cx="407" cy="279" r="35" fill="#477a50" stroke="#e8d9bd" stroke-width="6"/>
+  <path d="M390 279c9-10 17-10 25 0 5-8 10-10 17-8" fill="none" stroke="#d6e49b" stroke-linecap="round" stroke-width="4"/>
+  <ellipse cx="276" cy="300" rx="91" ry="63" fill="#f1cc78" stroke="#e8d9bd" stroke-width="7"/>
+  <path d="M205 291c13-31 33-44 70-45 30 2 57 18 72 48-38-16-87-13-142-3Z" fill="#fff0c6"/>
+  <circle cx="241" cy="296" r="4" fill="#bc8241"/><circle cx="294" cy="279" r="4" fill="#bc8241"/><circle cx="320" cy="309" r="4" fill="#bc8241"/><circle cx="267" cy="326" r="4" fill="#bc8241"/>
+  <path d="M228 267c18-10 37-13 57-10" fill="none" stroke="#b88745" stroke-linecap="round" stroke-width="3"/>
+  <path d="M89 117c11-22 23-28 38-29M463 111c-7-20-18-29-34-32" fill="none" stroke="#d7793d" stroke-linecap="round" stroke-width="6"/>
+  <circle cx="91" cy="183" r="7" fill="#d7793d"/><circle cx="456" cy="202" r="6" fill="#759467"/><circle cx="423" cy="85" r="5" fill="#e4ad45"/>
+</svg>

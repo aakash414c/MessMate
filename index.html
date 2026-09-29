@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MessMate - Digital Mess Management</title>
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/brand-polish.css">
+    <!-- <link rel="stylesheet" href="./css/style.css"> -->
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo-section">
+                <img src="./assets/messmate-mark.svg" alt="MessMate" class="logo">
+                <span class="brand-name">MessMate</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#roles">For every role</a></li>
+                <li><a href="#technology">How it works</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-actions">
+                <a class="signup-nav-btn" href="signup.html">Sign up</a>
+                <button class="login-btn" onclick="showLoginModal()">Login</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <p class="hero-kicker">A better rhythm for campus dining</p>
+            <h1 class="hero-title">Good food.<br><span class="highlight">Better planning.</span></h1>
+            <p class="hero-subtitle">Your campus mess, all in one place.</p>
+            <p class="hero-description">Book meals, check menus, share feedback, and support the team that runs your mess.</p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary" onclick="showLoginModal()">Get Started</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('features').scrollIntoView({behavior: 'smooth'})">Learn More</button>
+                <a class="btn btn-primary" href="signup.html">Create student account</a>
+            </div>
+            <div class="hero-stats" aria-label="MessMate features">
+                <div class="stat-item"><h3>Plan ahead</h3><p>Reserve meals before cutoff</p></div>
+                <div class="stat-item"><h3>Stay informed</h3><p>Menus and mess announcements</p></div>
+                <div class="stat-item"><h3>Keep improving</h3><p>Feedback and operational records</p></div>
+            </div>
+        </div>
+        <div class="hero-image">
+            <div class="hero-illustration">
+            <img src="./assets/hero-thali.svg" alt="Illustrated Indian thali with dal, curry, rice, roti, chutney, and salad" class="hero-logo">
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <h2 class="section-title">Made for the people who run and use a campus mess</h2>
+        <p class="section-subtitle">One place for students, mess staff, managers, and administrators</p>
+        
+        <div class="features-grid">
+            <article class="feature-card"><div class="feature-icon" aria-hidden="true">📅</div><h3>Meal bookings</h3><p>Reserve or cancel breakfast, lunch, snacks and dinner before configurable cutoffs so the kitchen has a clearer headcount.</p></article>
+            <article class="feature-card"><div class="feature-icon" aria-hidden="true">🍽️</div><h3>Daily and weekly menus</h3><p>Publish recurring weekday menus, schedule date-specific changes and restore the weekly plan when an override is cleared.</p></article>
+            <article class="feature-card"><div class="feature-icon" aria-hidden="true">✓</div><h3>Attendance and QR workflow</h3><p>Students can generate a short-lived QR pass for today's active booking. Staff can validate passes with a browser camera or use the booking-checked manual fallback.</p></article>
+            <article class="feature-card"><div class="feature-icon" aria-hidden="true">★</div><h3>Ratings and feedback</h3><p>Collect student meal ratings and comments to make food-quality feedback part of the day-to-day workflow.</p></article>
+            <article class="feature-card"><div class="feature-icon" aria-hidden="true">💬</div><h3>Complaint tracking</h3><p>Submit issues, attach an optional resized photo, and follow them through Pending, In Progress and Resolved states.</p></article>
+            <article class="feature-card"><div class="feature-icon" aria-hidden="true">🥬</div><h3>Inventory and low-stock alerts</h3><p>Track ingredients, quantities and thresholds, with stock movements visible to mess managers.</p></article>
+            <article class="feature-card"><div class="feature-icon" aria-hidden="true">🧾</div><h3>Suppliers and purchasing</h3><p>Maintain supplier details, register purchase orders and record received stock in the operations workspace.</p></article>
+            <article class="feature-card"><div class="feature-icon" aria-hidden="true">📈</div><h3>Demand estimates</h3><p>Use recent bookings and observed check-in ratios to estimate meal demand, with a booking-only fallback when needed.</p></article>
+            <article class="feature-card"><div class="feature-icon" aria-hidden="true">♻️</div><h3>Waste and sustainability records</h3><p>Log measured surplus or discarded food and review trends. Optional CO₂e estimates require a team-entered factor and source.</p></article>
+            <article class="feature-card"><div class="feature-icon" aria-hidden="true">₹</div><h3>Wallet ledger and fee records</h3><p>Review administrator-recorded credits and fee history. Ledger credits can settle a demo fee but are not real or transferable funds.</p></article>
+            <article class="feature-card"><div class="feature-icon" aria-hidden="true">🔔</div><h3>Announcements and staff duties</h3><p>Publish notices with read status and optional opt-in browser push; assign duties and update them individually or in bulk.</p></article>
+            <article class="feature-card"><div class="feature-icon" aria-hidden="true">📊</div><h3>Reports, search and administration</h3><p>Explore role-scoped records, sort reports by multiple fields, export CSVs including purchase expenses, and manage access and activity.</p></article>
+        </div>
+    </section>
+
+    <section class="objectives-section" aria-labelledby="objectives-title">
+        <div class="section-heading">
+            <p class="eyebrow">The MessMate goals</p>
+            <h2 id="objectives-title" class="section-title">Designed around better campus dining</h2>
+            <p class="section-subtitle">The project brings meal planning, service operations and student feedback into one shared system.</p>
+        </div>
+        <div class="objective-grid">
+            <article class="objective-card"><span>01</span><h3>Plan with demand</h3><p>Use booking and attendance history to inform meal preparation.</p></article>
+            <article class="objective-card"><span>02</span><h3>Improve accountability</h3><p>Keep attendance, inventory, purchasing and fee records traceable.</p></article>
+            <article class="objective-card"><span>03</span><h3>Close the feedback loop</h3><p>Give students a direct path to rate meals and track reported issues.</p></article>
+            <article class="objective-card"><span>04</span><h3>Support efficient operations</h3><p>Give staff and managers practical tools for menus, duties and stock.</p></article>
+            <article class="objective-card"><span>05</span><h3>Measure waste</h3><p>Record actual waste weights and review trends over time.</p></article>
+        </div>
+    </section>
+
+    <section id="technology" class="technology-section">
+        <div class="section-heading">
+            <p class="eyebrow">From student choice to service insight</p>
+            <h2 class="section-title">A connected workflow, built for campus operations</h2>
+            <p class="section-subtitle">MessMate follows an iterative project plan and keeps each role's records in one secure application.</p>
+        </div>
+        <div class="workflow-steps">
+            <article class="workflow-step"><span>01 · PLAN</span><h3>Set the menu</h3><p>Staff publish a recurring weekday plan or a one-day menu update.</p></article>
+            <article class="workflow-step"><span>02 · BOOK</span><h3>Choose meals</h3><p>Students opt in or out before the configured cutoff for each meal slot.</p></article>
+            <article class="workflow-step"><span>03 · SERVE</span><h3>Record check-ins</h3><p>Staff verify active bookings and record meal entry without duplicate check-ins.</p></article>
+            <article class="workflow-step"><span>04 · IMPROVE</span><h3>Review the data</h3><p>Managers compare demand, stock, feedback and measured waste in reports.</p></article>
+        </div>
+        <div class="technology-stack" aria-label="MessMate technology stack">
+            <div><small>FRONTEND</small><strong>HTML · CSS · JavaScript</strong></div>
+            <div><small>APPLICATION</small><strong>Node.js · Express</strong></div>
+            <div><small>DATA</small><strong>MongoDB · Mongoose</strong></div>
+            <div><small>ACCESS</small><strong>Role-based sessions</strong></div>
+        </div>
+        <p class="prototype-note"><strong>Academic prototype:</strong> browser-camera scanning is supported; no handheld scanner is connected. Wallet entries remain an administrative demo ledger. Browser push needs VAPID keys and opt-in, and live payment checkout needs provider credentials.</p>
+    </section>
+
+    <!-- Role workspaces -->
+    <section id="roles" class="roles-section">
+        <div class="section-heading">
+            <p class="eyebrow">One connected mess</p>
+            <h2 class="section-title">A clearer day for every role</h2>
+            <p class="section-subtitle">Purpose-built workspaces keep students, kitchen teams and campus administrators in sync.</p>
+        </div>
+        <div class="role-grid">
+            <article class="role-card role-student">
+                <span class="role-number">01 / STUDENT</span><div class="role-symbol" aria-hidden="true">◉</div>
+                <h3>Meals on your terms</h3><p>See the menu, reserve upcoming meals, check your wallet ledger and follow feedback or complaint updates.</p>
+                <button class="role-link" type="button" onclick="showLoginModal('student')">Student sign in <span aria-hidden="true">→</span></button>
+            </article>
+            <article class="role-card role-staff">
+                <span class="role-number">02 / MESS STAFF</span><div class="role-symbol" aria-hidden="true">✳</div>
+                <h3>Service, in step</h3><p>Publish menus and notices, record booked meal check-ins, handle complaints and keep daily duties moving.</p>
+                <button class="role-link" type="button" onclick="showLoginModal('staff')">Staff sign in <span aria-hidden="true">→</span></button>
+            </article>
+            <article class="role-card role-manager">
+                <span class="role-number">03 / MANAGER</span><div class="role-symbol" aria-hidden="true">⌁</div>
+                <h3>Operations at a glance</h3><p>Track stock and suppliers, review booking-led demand estimates, assign duties and log measured food waste.</p>
+                <button class="role-link" type="button" onclick="showLoginModal('manager')">Manager sign in <span aria-hidden="true">→</span></button>
+            </article>
+            <article class="role-card role-admin">
+                <span class="role-number">04 / ADMIN</span><div class="role-symbol" aria-hidden="true">◇</div>
+                <h3>Confident oversight</h3><p>Manage accounts and access, review fee records, monitor platform activity and export operational reports.</p>
+                <button class="role-link" type="button" onclick="showLoginModal('admin')">Admin sign in <span aria-hidden="true">→</span></button>
+            </article>
+        </div>
+    </section>
+
+    <section class="planning-section" aria-labelledby="planning-title">
+        <div class="planning-copy">
+            <p class="eyebrow">Less guesswork, more intention</p>
+            <h2 id="planning-title">A small booking today can make a better meal tomorrow.</h2>
+            <p>Students reserve before the meal cutoff. Mess teams use that signal alongside recorded check-ins and past demand to plan quantities, monitor supplies and learn from measured waste.</p>
+            <a class="planning-link" href="#contact">Explore the MessMate demo <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="planning-flow" aria-label="Booking informs planning, service and improvement">
+            <div class="flow-step"><span class="flow-icon">01</span><div><strong>Students book</strong><small>Choose meals before cutoff</small></div></div>
+            <div class="flow-connector" aria-hidden="true"></div>
+            <div class="flow-step"><span class="flow-icon">02</span><div><strong>Teams prepare</strong><small>Review bookings and stock</small></div></div>
+            <div class="flow-connector" aria-hidden="true"></div>
+            <div class="flow-step"><span class="flow-icon">03</span><div><strong>Everyone improves</strong><small>Learn from service and feedback</small></div></div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="about-content">
+            <h2 class="section-title">About <span class="highlight">MessMate</span></h2>
+            <p class="about-text">
+                MessMate is a campus dining project from the Department of Computer Science and Engineering at Chitkara University, Himachal Pradesh. It brings meal bookings, attendance, student feedback, inventory and mess operations into one role-based platform.
+            </p>
+            <p class="about-text">
+                The project team is Aakash Rana (2311981005), Aditya Antwal (2311981035) and Anubhav (2311981098). The application includes separate student, staff, manager and administrator experiences for academic demonstration.
+            </p>
+            <div class="about-features">
+                <div class="about-feature-item">
+                    <div class="about-icon">✓</div>
+                    <p>Use meal bookings to inform kitchen planning</p>
+                </div>
+                <div class="about-feature-item">
+                    <div class="about-icon">✓</div>
+                    <p>Improve communication between students and staff</p>
+                </div>
+                <div class="about-feature-item">
+                    <div class="about-icon">✓</div>
+                    <p>See a simple forecast based on recorded bookings</p>
+                </div>
+                <div class="about-feature-item">
+                    <div class="about-icon">✓</div>
+                    <p>Enhance student satisfaction with transparency</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Details -->
+    <section id="contact" class="contact">
+        <h2 class="section-title">A practical academic prototype</h2>
+        <p class="section-subtitle">The project uses role-based access across student, staff, manager and administrator dashboards. Attendance supports short-lived, booking-checked QR passes and manual fallback; notices support optional browser push; wallet fee payments use ledger credits; and real payment transfers require configured provider credentials.</p>
+        <div class="hero-buttons"><button class="btn btn-primary" onclick="showLoginModal('student')">Student sign in</button><button class="btn btn-secondary" onclick="showLoginModal('manager')">Manager sign in</button></div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <img src="./assets/messmate-mark.svg" alt="MessMate" class="footer-logo">
+                <p>Digital meal and mess operations</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Dashboards</h4>
+                <ul>
+                    <li><a href="#loginModal" onclick="showLoginModal('student')">Student Login</a></li>
+                    <li><a href="#loginModal" onclick="showLoginModal('staff')">Staff Login</a></li>
+                    <li><a href="#loginModal" onclick="showLoginModal('manager')">Manager Login</a></li>
+                    <li><a href="#loginModal" onclick="showLoginModal('admin')">Admin Login</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 MessMate Academic Project</p>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal" aria-hidden="true">
+        <div class="modal-content">
+            <span class="close" onclick="closeLoginModal()">&times;</span>
+            <div class="modal-header">
+                <img src="./assets/messmate-mark.svg" alt="MessMate" class="modal-logo">
+                <h2>Sign in to MessMate</h2>
+                <p>Plan your meals, manage your mess</p>
+            </div>
+            
+            <div class="login-type-selector">
+                <button class="type-btn active" data-type="student" onclick="switchLoginType('student')">Student</button>
+                <button class="type-btn" data-type="staff" onclick="switchLoginType('staff')">Mess Staff</button>
+                <button class="type-btn" data-type="manager" onclick="switchLoginType('manager')">Mess Manager</button>
+                <button class="type-btn" data-type="admin" onclick="switchLoginType('admin')">Admin</button>
+            </div>
+
+            <form class="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="userId">User ID</label>
+                    <input type="text" id="userId" placeholder="Enter your User ID" required>
+                    <small id="userIdHint" class="form-hint"></small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                </div>
+                
+                <div class="form-options">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="rememberMe">
+                        <span>Remember me</span>
+                    </label>
+                    <span class="forgot-password">For account access, contact your mess administrator.</span>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-block">LOGIN</button>
+                <p class="signup-prompt">New student? <a class="text-action" href="signup.html">Create an account</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- <script src="script.js"></script> -->
+    <script src="js/auth.js"></script>
+
+</body>
+</html>

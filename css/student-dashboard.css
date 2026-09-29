@@ -1,0 +1,824 @@
+/* Student Dashboard Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #4CAF50;
+    --primary-dark: #45a049;
+    --secondary-color: #2196F3;
+    --danger-color: #f44336;
+    --text-dark: #333;
+    --text-light: #666;
+    --bg-light: #f5f5f5;
+    --bg-gray: #e8e8e8;
+    --white: #ffffff;
+    --shadow: 0 2px 8px rgba(0,0,0,0.1);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bg-light);
+    min-height: 100vh;
+    color: var(--text-dark);
+    overflow-x: hidden;
+}
+
+button,
+input,
+textarea {
+    font: inherit;
+}
+
+.dashboard-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+    width: 100%;
+}
+
+/* Header */
+.dashboard-header {
+    background: var(--white);
+    padding: 1.5rem 2rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.header-logo {
+    width: 60px;
+    height: auto;
+}
+
+.header-text h1 {
+    font-size: 1.5rem;
+    color: var(--text-dark);
+    margin-bottom: 0.2rem;
+}
+
+.header-text p {
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+.logout-btn {
+    background: var(--danger-color);
+    color: var(--white);
+    border: none;
+    padding: 0.6rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.logout-btn:hover {
+    background: #d32f2f;
+    transform: translateY(-2px);
+}
+
+/* Card Styles */
+.card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 1.5rem;
+}
+
+.card h2 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    color: var(--text-dark);
+}
+
+.card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-dark);
+}
+
+/* User Info Card */
+.user-info-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: var(--white);
+}
+
+.user-info-card h2 {
+    color: var(--white);
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: 600;
+}
+
+.info-value {
+    font-weight: 400;
+}
+
+/* Hostel Selection */
+.hostel-selection {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.hostel-type,
+.hostel-numbers {
+    display: flex;
+    gap: 1rem;
+}
+
+.radio-label {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.8rem;
+    background: var(--bg-gray);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.radio-label input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.radio-label input[type="radio"]:checked + span {
+    color: var(--white);
+}
+
+.radio-label input[type="radio"]:checked ~ * {
+    color: var(--white);
+}
+
+.radio-label:has(input[type="radio"]:checked) {
+    background: var(--primary-color);
+    color: var(--white);
+}
+
+.radio-label span {
+    font-weight: 600;
+    color: var(--text-dark);
+    transition: color 0.3s;
+}
+
+/* Attendance Card */
+.attendance-subtitle {
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+}
+
+.meal-section {
+    border: 2px solid var(--bg-gray);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.meal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.meal-header h4 {
+    font-size: 1.1rem;
+    color: var(--text-dark);
+}
+
+.meal-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.action-btn {
+    background: var(--bg-gray);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 0.85rem;
+}
+
+.action-btn:hover {
+    background: var(--bg-light);
+    transform: translateY(-2px);
+}
+
+.meal-attendance {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.attendance-btn {
+    flex: 1;
+    padding: 1rem;
+    border: 2px solid var(--bg-gray);
+    background: var(--white);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.yes-btn.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--white);
+}
+
+.no-btn.active {
+    background: var(--danger-color);
+    border-color: var(--danger-color);
+    color: var(--white);
+}
+
+.attendance-btn:hover {
+    transform: translateY(-2px);
+}
+
+.time-limit {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.complaint-btn {
+    width: 100%;
+    background: var(--bg-gray);
+    padding: 0.7rem;
+}
+
+.remember-section {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--bg-gray);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.submit-btn {
+    width: 100%;
+    background: var(--primary-color);
+    color: var(--white);
+    border: none;
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    transition: all 0.3s;
+}
+
+.submit-btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+/* Payment Card */
+.payment-card {
+    border-top: 4px solid var(--secondary-color);
+}
+
+.payment-header,
+.payment-summary,
+.payment-history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.payment-header {
+    margin-bottom: 1.5rem;
+}
+
+.payment-subtitle {
+    color: var(--text-light);
+    font-size: 0.95rem;
+}
+
+.payment-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 86px;
+    padding: 0.35rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.payment-status.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.payment-status.paid {
+    background: #d4edda;
+    color: #155724;
+}
+
+.payment-summary {
+    background: var(--bg-light);
+    border-radius: 10px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.payment-amount {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.payment-label {
+    color: var(--text-light);
+    font-size: 0.85rem;
+}
+
+.payment-amount strong {
+    color: var(--text-dark);
+    font-size: 1.8rem;
+}
+
+.pay-btn {
+    background: var(--secondary-color);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    padding: 0.85rem 1.4rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    min-width: 120px;
+}
+
+.pay-btn:hover:not(:disabled) {
+    background: #1976D2;
+    transform: translateY(-2px);
+}
+
+.pay-btn:disabled {
+    background: var(--bg-gray);
+    color: var(--text-light);
+    cursor: not-allowed;
+}
+
+.payment-history {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.payment-history-item {
+    padding: 0.9rem;
+    background: var(--bg-light);
+    border-radius: 8px;
+}
+
+.payment-history-item div {
+    display: flex;
+    flex-direction: column;
+}
+
+.payment-history-item span {
+    color: var(--text-light);
+    font-size: 0.85rem;
+}
+
+.payment-receipt-link { display: inline-block; margin-top: .35rem; color: #176146; font-weight: 700; }
+.wallet-card > p:first-of-type { display: flex; justify-content: space-between; gap: 1rem; align-items: center; font-size: 1.1rem; }
+.wallet-card > p:first-of-type strong { color: #176146; font-size: 1.35rem; }
+.wallet-transactions { display: grid; gap: .55rem; margin-top: .85rem; }
+.wallet-transaction-row { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: .7rem; background: var(--bg-light); border-radius: 8px; }
+.wallet-transaction-row span { display: grid; gap: .2rem; }
+.wallet-transaction-row small { color: var(--text-light); }
+.announcement-unread { display: inline-block; margin-left: .45rem; padding: .2rem .5rem; border-radius: 999px; background: #e8f4eb; color: #176146; font-size: .76rem; vertical-align: middle; }
+.notice-item.unread { border-left: 4px solid #34875d; }
+.mark-notice-read { margin-top: .45rem; padding: .45rem .65rem; border: 1px solid #176146; border-radius: 7px; background: #fff; color: #176146; font: inherit; font-size: .88rem; font-weight: 700; cursor: pointer; }
+
+.no-data {
+    text-align: center;
+    color: var(--text-light);
+    padding: 1rem;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background-color: var(--white);
+    margin: 10% auto;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    animation: slideDown 0.3s;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #000;
+}
+
+.modal-content h2 {
+    margin-bottom: 1.5rem;
+    color: var(--text-dark);
+}
+
+.menu-content {
+    padding: 0;
+    background: transparent;
+    line-height: 1.6;
+}
+
+.menu-illustration {
+    margin: 0 0 1.2rem;
+    overflow: hidden;
+    border: 1px solid #e7e3d7;
+    border-radius: 14px;
+    background: #faf8f0;
+}
+
+.menu-illustration img {
+    display: block;
+    width: 100%;
+    max-height: 245px;
+    object-fit: cover;
+}
+
+.menu-illustration figcaption {
+    padding: 0.55rem 0.8rem;
+    color: #667269;
+    font-size: 0.78rem;
+    line-height: 1.4;
+}
+
+.menu-items-heading {
+    margin: 0 0 0.6rem;
+    font-size: 1rem;
+}
+
+.menu-item-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.55rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.menu-item-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    min-height: 48px;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid #e2e9e2;
+    border-radius: 10px;
+    background: #fff;
+    overflow-wrap: anywhere;
+}
+
+.menu-item-mark {
+    display: grid;
+    flex: 0 0 32px;
+    width: 32px;
+    height: 32px;
+    place-items: center;
+    border-radius: 50%;
+    background: #f3f5e9;
+    font-size: 1.15rem;
+}
+
+.complaint-item-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.complaint-item-head > strong {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.complaint-status {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    padding: 0.22rem 0.58rem;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.045em;
+    line-height: 1.25;
+    white-space: nowrap;
+}
+
+.complaint-status.pending {
+    color: #80520c;
+    border-color: #edd49c;
+    background: #fff5d9;
+}
+
+.complaint-status.in_progress {
+    color: #245b8c;
+    border-color: #b9d7ee;
+    background: #eaf5ff;
+}
+
+.complaint-status.resolved {
+    color: #236343;
+    border-color: #b9dec6;
+    background: #eaf7ee;
+}
+
+.review-form,
+.complaint-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.rating-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.star-rating {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 2rem;
+}
+
+.star {
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.star:hover,
+.star.active {
+    color: #ffd700;
+}
+
+.review-form textarea,
+.complaint-form textarea,
+.complaint-form input {
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1rem;
+    resize: vertical;
+}
+
+.review-form textarea:focus,
+.complaint-form textarea:focus,
+.complaint-form input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 1rem;
+    }
+    
+    .dashboard-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .meal-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .hostel-numbers {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 640px) {
+    .dashboard-header {
+        padding: 1rem;
+        align-items: stretch;
+    }
+
+    .header-content {
+        justify-content: center;
+    }
+
+    .header-logo {
+        width: 48px;
+    }
+
+    .header-text h1 {
+        font-size: 1.15rem;
+        line-height: 1.25;
+    }
+
+    .header-text p {
+        font-size: 0.82rem;
+    }
+
+    .logout-btn {
+        width: 100%;
+    }
+
+    .card {
+        padding: 1.25rem;
+        border-radius: 10px;
+    }
+
+    .card h2,
+    .card h3 {
+        font-size: 1.1rem;
+    }
+
+    .info-row {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .hostel-type,
+    .hostel-numbers,
+    .meal-actions,
+    .meal-attendance {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+    }
+
+    .hostel-numbers {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .meal-section {
+        padding: 1rem;
+    }
+
+    .payment-header,
+    .payment-summary,
+    .payment-history-item {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .payment-status,
+    .pay-btn {
+        width: 100%;
+    }
+
+    .meal-actions {
+        gap: 0.5rem;
+    }
+
+    .action-btn,
+    .attendance-btn,
+    .submit-btn {
+        min-height: 44px;
+    }
+
+    .modal {
+        padding: 1rem;
+        overflow-y: auto;
+    }
+
+    .modal-content {
+        margin: 1rem auto;
+        width: 100%;
+        max-height: calc(100vh - 2rem);
+        overflow-y: auto;
+        padding: 1.25rem;
+    }
+
+    .star-rating {
+        justify-content: space-between;
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 380px) {
+    .dashboard-container {
+        padding: 0.75rem;
+    }
+
+    .header-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hostel-type,
+    .hostel-numbers,
+    .meal-actions,
+    .meal-attendance {
+        grid-template-columns: 1fr;
+    }
+}
+/* Announcements and personal status cards */
+.notice-item { padding: 1rem; border: 1px solid #e4e9e6; border-radius: 12px; margin: .75rem 0; background: #fbfdfb; }
+.notice-item p { margin: .45rem 0; line-height: 1.5; overflow-wrap: anywhere; }
+.notice-item small { color: #62716a; }
+#bookingDate { display: block; max-width: 100%; margin: .5rem 0 1rem; padding: .7rem; border: 1px solid #cbd5cf; border-radius: 8px; font: inherit; }
+#bookingStatus { min-height: 1.4em; color: #225f43; }
+.meal-section .attendance-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+
+.meal-actions .qr-pass-btn { border-color: #c8d6c6; color: #20543e; background: #f0f4eb; }
+.qr-pass-modal { width: min(92vw, 430px); max-height: calc(100vh - 2rem); overflow-y: auto; text-align: center; }
+.qr-pass-modal .close { position: absolute; top: .65rem; right: .85rem; }
+.qr-pass-image { display: block; width: min(280px, 75vw); height: auto; margin: 1rem auto; border: 8px solid #fff; border-radius: 12px; box-shadow: 0 8px 26px rgba(31,57,43,.12); }
+.qr-pass-countdown { color: #20543e; font-weight: 750; }
+.qr-pass-help { margin: .5rem auto 1rem; max-width: 310px; color: #65766d; font-size: .85rem; line-height: 1.5; }

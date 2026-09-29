@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mess Staff Dashboard - MessMate</title>
+    <link rel="stylesheet" href="./css/staff-dashboard.css">
+    <link rel="stylesheet" href="./css/global-search.css">
+    <link rel="stylesheet" href="./css/operations-reports.css">
+    <link rel="stylesheet" href="./css/brand-polish.css">
+        <!-- <link rel="stylesheet" href="./css/style.css"> -->
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-content">
+                <img src="./assets/messmate-mark.svg" alt="MessMate" class="header-logo">
+                <div class="header-text">
+                    <h1>MessMate</h1>
+                    <p>Plan your meals, manage your mess</p>
+                </div>
+            </div>
+            <div class="header-actions"><button class="push-subscribe-btn" id="pushSubscribeButton" type="button" disabled>Enable alerts</button><span class="push-subscribe-status" id="pushSubscribeStatus" role="status" aria-live="polite">Checking notification support…</span><button class="logout-btn" onclick="logout()">Logout</button></div>
+        </header>
+        <details class="global-search-panel"><summary>Search MessMate</summary><form id="globalSearchForm" class="global-search-form"><input id="globalSearchInput" type="search" minlength="2" maxlength="80" placeholder="Menus, notices, students, duties…" aria-label="Search records you can access" required><button type="submit">Search</button></form><div id="globalSearchResults" class="global-search-results" role="status"></div></details>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- User Info Card -->
+            <div class="card user-info-card">
+                <h2>Mess Staff Dashboard</h2>
+                <div class="info-row">
+                    <span class="info-label">User ID</span>
+                    <span class="info-value" id="userId">Loading...</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Date</span>
+                    <span class="info-value" id="currentDate">Loading...</span>
+                </div>
+            </div>
+
+            <section class="card">
+                <h3>Publish an announcement</h3>
+                <form id="announcementForm" class="announcement-form" onsubmit="publishAnnouncement(event)">
+                    <label for="announcementTitle">Title</label>
+                    <input id="announcementTitle" maxlength="120" placeholder="e.g. Mess closed for maintenance" required>
+                    <label for="announcementBody">Message</label>
+                    <textarea id="announcementBody" maxlength="2000" rows="4" placeholder="Write a clear notice for students and staff…" required></textarea>
+                    <div class="announcement-form-footer"><small>Keep it clear and useful. Up to 2,000 characters.</small><button class="update-btn" type="submit">Publish announcement</button></div>
+                </form>
+                <p id="announcementMessage" class="form-feedback" role="status" aria-live="polite"></p>
+            </section>
+
+            <section class="card">
+                <h3>QR meal check-in</h3>
+                <p>Scan a student's short-lived pass to verify today's active booking. Camera permission is required; manual entry remains available below.</p>
+                <div class="qr-scanner-panel"><div id="qrReader" class="qr-reader" aria-label="Camera QR scanner"></div><div class="qr-scanner-actions"><button class="update-btn" type="button" onclick="startQrScanner()">Start camera scanner</button><button class="refresh-btn" type="button" onclick="stopQrScanner()">Stop camera</button></div><p id="qrScanMessage" role="status" aria-live="polite">Camera is stopped.</p></div>
+                <h4>Manual fallback</h4>
+                <form id="checkInForm" onsubmit="recordCheckIn(event)">
+                    <input id="checkInStudent" placeholder="Student ID" required>
+                    <select id="checkInMeal"><option value="breakfast">Breakfast</option><option value="lunch">Lunch</option><option value="snacks">Snacks</option><option value="dinner">Dinner</option></select>
+                    <input id="checkInDate" type="date" required>
+                    <button class="update-btn" type="submit">Record check-in</button>
+                </form>
+                <p id="checkInMessage" role="status"></p>
+            </section>
+
+            <section class="card operations-report-card"><h3>Bookings and attendance reports</h3><p class="muted">Filter records, choose primary and secondary sort keys, and download CSV files for the selected criteria. Search matches student or checking staff ID. Booking status applies to the booking table.</p><form id="operationsReportFilters" class="operations-report-filters"><label>From<input id="operationsReportFrom" type="date" required></label><label>To<input id="operationsReportTo" type="date" required></label><label>Meal<select id="operationsReportMeal"><option value="all">All meals</option><option value="breakfast">Breakfast</option><option value="lunch">Lunch</option><option value="snacks">Snacks</option><option value="dinner">Dinner</option></select></label><label>Booking status<select id="operationsReportStatus"><option value="all">All</option><option value="booked">Booked</option><option value="cancelled">Cancelled</option></select></label><label>Student/staff ID<input id="operationsReportSearch" type="search" maxlength="80" placeholder="Search ID"></label><label>Sort first<select id="operationsReportSort"><option value="newest">Date: newest first</option><option value="oldest">Date: oldest first</option><option value="student">Student ID</option></select></label><label>Then by<select id="operationsReportThen"><option value="meal">Meal</option><option value="student">Student ID</option><option value="status">Status</option><option value="date">Date</option><option value="checkedInBy">Checking staff</option><option value="none">No secondary sort</option></select></label><button class="update-btn" type="submit">Apply filters</button></form><p id="operationsReportMessage" class="muted" role="status">Loading…</p><div class="report-table-scroll"><h4>Bookings</h4><table class="operations-report-table"><thead><tr><th>Date</th><th>Meal</th><th>Student ID</th><th>Status</th></tr></thead><tbody id="operationsBookings"><tr><td colspan="4">Loading…</td></tr></tbody></table><a id="operationsBookingsCsv" href="/api/reports/bookings.csv">Download filtered bookings CSV</a></div><div class="report-table-scroll"><h4>Check-ins</h4><table class="operations-report-table"><thead><tr><th>Date</th><th>Meal</th><th>Student ID</th><th>Checked in by</th><th>Time</th></tr></thead><tbody id="operationsCheckIns"><tr><td colspan="5">Loading…</td></tr></tbody></table><a id="operationsCheckInsCsv" href="/api/reports/check-ins.csv">Download filtered check-ins CSV</a></div></section>
+
+            <section class="card">
+                <h3>My assigned duties</h3>
+                <div id="staffDuties"></div>
+            </section>
+
+            <section class="card">
+                <h3>Complaint queue</h3>
+                <div id="staffComplaints"><p class="no-data">Loading complaints…</p></div>
+            </section>
+
+            <!-- Today's Menu Card -->
+            <div class="card menu-card">
+                <h3 id="menuTitle">Menu planner</h3>
+                <p class="menu-subtitle">Choose a date to load its weekday menu automatically. Save a date-specific change only when that day needs an exception.</p>
+                <label for="menuDate">Choose a date</label>
+                <input id="menuDate" type="date" required onchange="loadMenu()">
+                <p id="menuSourceNote" class="menu-subtitle" role="status"></p>
+
+                <div class="menu-grid">
+                    <!-- Breakfast -->
+                    <div class="menu-column">
+                        <h4>Breakfast</h4>
+                        <textarea 
+                            id="breakfastMenu" 
+                            rows="8" 
+                            placeholder="Enter breakfast menu items..."
+                        ></textarea>
+                    </div>
+
+                    <!-- Lunch -->
+                    <div class="menu-column">
+                        <h4>Lunch</h4>
+                        <textarea 
+                            id="lunchMenu" 
+                            rows="8" 
+                            placeholder="Enter lunch menu items..."
+                        ></textarea>
+                    </div>
+
+                    <!-- Dinner -->
+                    <div class="menu-column">
+                        <h4>Dinner</h4>
+                        <textarea 
+                            id="dinnerMenu" 
+                            rows="8" 
+                            placeholder="Enter dinner menu items..."
+                        ></textarea>
+                    </div>
+                    <div class="menu-column"><h4>Snacks</h4><textarea id="snacksMenu" rows="8" placeholder="Enter snacks menu items..."></textarea></div>
+                </div>
+
+                <button class="update-btn" onclick="updateMenu()">Save date-specific menu</button>
+                <button class="refresh-btn" type="button" onclick="clearDateMenu()">Clear date override</button>
+            </div>
+
+            <section class="card menu-card">
+                <h3>Recurring weekly menu</h3>
+                <p class="menu-subtitle">This menu repeats on the selected weekday. A saved date-specific menu overrides it for that date.</p>
+                <label for="weeklyMenuDay">Weekday</label>
+                <select id="weeklyMenuDay" onchange="loadWeeklyMenu()">
+                    <option value="0">Sunday</option><option value="1">Monday</option><option value="2">Tuesday</option><option value="3">Wednesday</option><option value="4">Thursday</option><option value="5">Friday</option><option value="6">Saturday</option>
+                </select>
+                <div class="menu-grid">
+                    <div class="menu-column"><h4>Breakfast</h4><textarea id="weeklyBreakfastMenu" rows="5" maxlength="2000" placeholder="Weekly breakfast"></textarea></div>
+                    <div class="menu-column"><h4>Lunch</h4><textarea id="weeklyLunchMenu" rows="5" maxlength="2000" placeholder="Weekly lunch"></textarea></div>
+                    <div class="menu-column"><h4>Snacks</h4><textarea id="weeklySnacksMenu" rows="5" maxlength="2000" placeholder="Weekly snacks"></textarea></div>
+                    <div class="menu-column"><h4>Dinner</h4><textarea id="weeklyDinnerMenu" rows="5" maxlength="2000" placeholder="Weekly dinner"></textarea></div>
+                </div>
+                <button class="update-btn" type="button" onclick="updateWeeklyMenu()">Save recurring menu</button>
+                <button class="refresh-btn" type="button" onclick="clearWeeklyMenu()">Remove this weekday's recurring menu</button>
+                <p id="weeklyMenuMessage" role="status"></p>
+            </section>
+
+            <!-- Total Students Eating Card -->
+            <div class="card students-card">
+                <h3>Total Students Eating</h3>
+                <div class="students-count-container">
+                    <div class="count-item">
+                        <span class="count-label">Breakfast</span>
+                        <span class="count-number" id="breakfastCount">0</span>
+                    </div>
+                    <div class="count-item">
+                        <span class="count-label">Lunch</span>
+                        <span class="count-number" id="lunchCount">0</span>
+                    </div>
+                    <div class="count-item">
+                        <span class="count-label">Snacks</span>
+                        <span class="count-number" id="snacksCount">0</span>
+                    </div>
+                    <div class="count-item">
+                        <span class="count-label">Dinner</span>
+                        <span class="count-number" id="dinnerCount">0</span>
+                    </div>
+                </div>
+                <p class="last-updated">Last Updated at <span id="lastUpdated">--:--</span></p>
+                <button class="refresh-btn" onclick="refreshCounts()">Refresh Counts</button>
+            </div>
+
+            <!-- Quick Stats Card -->
+            <div class="card stats-card">
+                <h3>Today's Statistics</h3>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalStudents">0</span>
+                            <span class="stat-label">Total Students</span>
+                        </div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon">🍽️</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalMeals">0</span>
+                            <span class="stat-label">Total Meals</span>
+                        </div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon">⭐</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="avgRating">0.0</span>
+                            <span class="stat-label">Avg Rating</span>
+                        </div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon">💬</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="reviewCount">0</span>
+                            <span class="stat-label">Reviews Today</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Reviews Card -->
+            <div class="card reviews-card">
+                <h3>Recent Reviews</h3>
+                <div id="reviewsList" class="reviews-list">
+                    <p class="no-data">No reviews yet</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/node_modules/html5-qrcode/html5-qrcode.min.js"></script>
+    <script src="js/staff-dashboard.js"></script>
+    <script src="js/operations-reports.js"></script>
+    <script src="js/global-search.js"></script>
+    <script src="js/push-notifications.js"></script>
+</body>
+</html>

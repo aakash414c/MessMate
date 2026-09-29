@@ -1,0 +1,13 @@
+.operations-report-card { min-width: 0; }
+.operations-report-filters { display: grid; grid-template-columns: repeat(3, minmax(140px, 1fr)); gap: .75rem; align-items: end; margin: 1rem 0; }
+.operations-report-filters label { display: grid; gap: .3rem; color: #52645b; font-size: .9rem; }
+.operations-report-filters input, .operations-report-filters select { min-width: 0; width: 100%; padding: .65rem; border: 1px solid #d5ded9; border-radius: 8px; font: inherit; color: #21342b; background: #fff; }
+.report-table-scroll { overflow-x: auto; margin: 1rem 0; }
+.report-table-scroll h4 { margin: .75rem 0; }
+.operations-report-table { border-collapse: collapse; width: 100%; min-width: 520px; text-align: left; }
+.operations-report-table th, .operations-report-table td { padding: .65rem .55rem; border-bottom: 1px solid #e1e8e3; }
+.operations-report-table th { background: #f1f6f2; color: #31493d; }
+.operations-report-table td { overflow-wrap: anywhere; }
+.report-table-scroll > a { display: inline-block; margin-top: .6rem; font-weight: 700; }
+@media (max-width: 720px) { .operations-report-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 420px) { .operations-report-filters { grid-template-columns: 1fr; } }

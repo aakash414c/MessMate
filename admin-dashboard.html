@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - MessMate</title>
+    <link rel="stylesheet" href="./css/admin-dashboard.css">
+    <link rel="stylesheet" href="./css/operations-reports.css">
+    <link rel="stylesheet" href="./css/global-search.css">
+    <link rel="stylesheet" href="./css/brand-polish.css">
+        <!-- <link rel="stylesheet" href="./css/style.css"> -->
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-content">
+                <img src="./assets/messmate-mark.svg" alt="MessMate" class="header-logo">
+                <div class="header-text">
+                    <h1>MessMate</h1>
+                    <p>Plan your meals, manage your mess</p>
+                </div>
+            </div>
+            <div class="header-actions"><button class="push-subscribe-btn" id="pushSubscribeButton" type="button" disabled>Enable alerts</button><span class="push-subscribe-status" id="pushSubscribeStatus" role="status" aria-live="polite">Checking notification support…</span><button class="logout-btn" onclick="logout()">Logout</button></div>
+        </header>
+        <details class="global-search-panel"><summary>Search MessMate</summary><form id="globalSearchForm" class="global-search-form"><input id="globalSearchInput" type="search" minlength="2" maxlength="80" placeholder="Users, menus, complaints, stock…" aria-label="Search records you can access" required><button type="submit">Search</button></form><div id="globalSearchResults" class="global-search-results" role="status"></div></details>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- User Info Card -->
+            <div class="card user-info-card">
+                <h2>Admin Dashboard</h2>
+                <div class="info-row">
+                    <span class="info-label">User ID</span>
+                    <span class="info-value" id="userId">Loading...</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Date</span>
+                    <span class="info-value" id="currentDate">Loading...</span>
+                </div>
+            </div>
+
+            <!-- Total Students Card -->
+            <div class="card students-card">
+                <h3>Total Students</h3>
+                <div class="students-grid">
+                    <div class="student-count-box">
+                        <h4>Breakfast</h4>
+                        <div class="big-number" id="breakfastCount">0</div>
+                    </div>
+                    <div class="student-count-box">
+                        <h4>Lunch</h4>
+                        <div class="big-number" id="lunchCount">0</div>
+                    </div>
+                    <div class="student-count-box">
+                        <h4>Snacks</h4><div class="big-number" id="snacksCount">0</div>
+                    </div>
+                    <div class="student-count-box">
+                        <h4>Dinner</h4>
+                        <div class="big-number" id="dinnerCount">0</div>
+                    </div>
+                </div>
+                <p class="last-updated">Last Updated at <span id="lastUpdated">--:--</span></p>
+                <button class="refresh-btn" onclick="refreshData()">Refresh Data</button>
+            </div>
+
+            <!-- Overview Stats -->
+            <div class="card overview-card">
+                <h3>Today's Overview</h3>
+                <div class="overview-grid">
+                    <div class="overview-item">
+                        <div class="overview-icon">👥</div>
+                        <div class="overview-info">
+                            <span class="overview-value" id="uniqueStudents">0</span>
+                            <span class="overview-label">Unique Students</span>
+                        </div>
+                    </div>
+                    <div class="overview-item">
+                        <div class="overview-icon">🍽️</div>
+                        <div class="overview-info">
+                            <span class="overview-value" id="totalMeals">0</span>
+                            <span class="overview-label">Total Meals</span>
+                        </div>
+                    </div>
+                    <div class="overview-item">
+                        <div class="overview-icon">⭐</div>
+                        <div class="overview-info">
+                            <span class="overview-value" id="avgRating">0.0</span>
+                            <span class="overview-label">Average Rating</span>
+                        </div>
+                    </div>
+                    <div class="overview-item">
+                        <div class="overview-icon">📝</div>
+                        <div class="overview-info">
+                            <span class="overview-value" id="totalReviews">0</span>
+                            <span class="overview-label">Total Reviews</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <section class="card account-admin-card">
+                <h3>Account administration</h3>
+                <p>Create accounts for students and operations staff. Initial passwords are hashed before storage.</p>
+                <form class="account-create-form" onsubmit="createAccount(event)">
+                    <input id="newUserId" type="text" minlength="3" maxlength="32" pattern="[A-Za-z0-9_-]+" placeholder="User ID" required>
+                    <input id="newUserPassword" type="password" minlength="12" maxlength="200" autocomplete="new-password" placeholder="Initial password (12+ characters)" required>
+                    <select id="newUserRole" required><option value="student">Student</option><option value="staff">Mess Staff</option><option value="manager">Mess Manager</option><option value="admin">Administrator</option></select>
+                    <button class="refresh-btn" type="submit">Create account</button>
+                </form>
+                <p id="accountAdminMessage" role="status"></p>
+                <div class="account-list-heading"><label for="accountRoleFilter">Filter accounts</label><select id="accountRoleFilter" onchange="loadUsers()"><option value="all">All roles</option><option value="student">Students</option><option value="staff">Mess Staff</option><option value="manager">Mess Managers</option><option value="admin">Administrators</option></select></div>
+                <div id="accountList" class="payments-list"><p class="no-data">Loading accounts…</p></div>
+            </section>
+
+            <section class="card operations-report-card"><h3>Bookings and attendance reports</h3><p class="muted">Filter records, choose primary and secondary sort keys, and download CSV files for the selected criteria. Search matches student or checking staff ID. Booking status applies to the booking table.</p><form id="operationsReportFilters" class="operations-report-filters"><label>From<input id="operationsReportFrom" type="date" required></label><label>To<input id="operationsReportTo" type="date" required></label><label>Meal<select id="operationsReportMeal"><option value="all">All meals</option><option value="breakfast">Breakfast</option><option value="lunch">Lunch</option><option value="snacks">Snacks</option><option value="dinner">Dinner</option></select></label><label>Booking status<select id="operationsReportStatus"><option value="all">All</option><option value="booked">Booked</option><option value="cancelled">Cancelled</option></select></label><label>Student/staff ID<input id="operationsReportSearch" type="search" maxlength="80" placeholder="Search ID"></label><label>Sort first<select id="operationsReportSort"><option value="newest">Date: newest first</option><option value="oldest">Date: oldest first</option><option value="student">Student ID</option></select></label><label>Then by<select id="operationsReportThen"><option value="meal">Meal</option><option value="student">Student ID</option><option value="status">Status</option><option value="date">Date</option><option value="checkedInBy">Checking staff</option><option value="none">No secondary sort</option></select></label><button class="refresh-btn" type="submit">Apply filters</button></form><p id="operationsReportMessage" class="muted" role="status">Loading…</p><div class="report-table-scroll"><h4>Bookings</h4><table class="operations-report-table"><thead><tr><th>Date</th><th>Meal</th><th>Student ID</th><th>Status</th></tr></thead><tbody id="operationsBookings"><tr><td colspan="4">Loading…</td></tr></tbody></table><a id="operationsBookingsCsv" href="/api/reports/bookings.csv">Download filtered bookings CSV</a></div><div class="report-table-scroll"><h4>Check-ins</h4><table class="operations-report-table"><thead><tr><th>Date</th><th>Meal</th><th>Student ID</th><th>Checked in by</th><th>Time</th></tr></thead><tbody id="operationsCheckIns"><tr><td colspan="5">Loading…</td></tr></tbody></table><a id="operationsCheckInsCsv" href="/api/reports/check-ins.csv">Download filtered check-ins CSV</a></div></section>
+
+            <section class="card operations-report-card"><h3>User activity</h3><p class="muted">Successful sign-ins and authenticated write actions. The report stores the actor, role, route, method, and response status, never request bodies or passwords.</p><form id="activityReportFilters" class="operations-report-filters"><label>From<input id="activityReportFrom" type="date" required></label><label>To<input id="activityReportTo" type="date" required></label><label>Search user/action<input id="activityReportSearch" type="search" maxlength="80" placeholder="ID, role, or action"></label><label>Sort<select id="activityReportSort"><option value="newest">Newest first</option><option value="user">User ID</option></select></label><button class="refresh-btn" type="submit">Apply filters</button></form><p id="activityReportMessage" class="muted" role="status">Loading…</p><div class="report-table-scroll"><table class="operations-report-table"><thead><tr><th>Time</th><th>User</th><th>Role</th><th>Method</th><th>Action</th><th>Status</th></tr></thead><tbody id="activityReportRows"><tr><td colspan="6">Loading…</td></tr></tbody></table><a id="activityReportCsv" href="/api/reports/activity.csv">Download filtered activity CSV</a></div></section>
+
+            <!-- Payment Overview -->
+            <div class="card payments-card">
+                <div class="payments-header">
+                    <div>
+                        <h3>Mess Fee Payments</h3>
+                        <p class="payment-subtitle" id="adminPaymentMonth">Loading payment month...</p>
+                        <a href="/api/reports/fees.csv">Download current month fees CSV</a>
+                    </div>
+                    <button class="refresh-btn compact-refresh" onclick="loadPayments()">Refresh Payments</button>
+                </div>
+                <div class="payment-admin-grid">
+                    <div class="payment-admin-box">
+                        <span class="payment-label">Collected</span>
+                        <strong id="totalCollected">Rs. 0</strong>
+                    </div>
+                    <div class="payment-admin-box">
+                        <span class="payment-label">Paid Students</span>
+                        <strong id="paidStudents">0</strong>
+                    </div>
+                    <div class="payment-admin-box">
+                        <span class="payment-label">Pending Students</span>
+                        <strong id="pendingStudents">0</strong>
+                    </div>
+                </div>
+                <div class="filter-section payment-list-tools"><label for="paymentSearch">Search student ID</label><input id="paymentSearch" type="search" placeholder="Student ID" oninput="filterPaymentList()"><label for="paymentSort">Sort payments</label><select id="paymentSort" onchange="filterPaymentList()"><option value="status">Status</option><option value="student">Student ID</option><option value="amount">Amount</option><option value="recent">Most recent</option></select></div>
+                <div id="paymentsList" class="payments-list">
+                    <p class="no-data">No payments yet</p>
+                </div>
+            </div>
+
+            <!-- Reviews/Complaints Card -->
+            <div class="card feedback-card">
+                <div class="feedback-header">
+                    <h3>Reviews/Complaints</h3>
+                    <div class="feedback-tabs">
+                        <button class="tab-btn active" onclick="switchTab('reviews')">Reviews</button>
+                        <button class="tab-btn" onclick="switchTab('complaints')">Complaints</button>
+                    </div>
+                </div>
+
+                <!-- Reviews Tab -->
+                <div id="reviewsTab" class="feedback-content">
+                    <div class="filter-section">
+                        <select id="reviewMealFilter" onchange="filterReviews()">
+                            <option value="all">All Meals</option>
+                            <option value="breakfast">Breakfast</option>
+                            <option value="lunch">Lunch</option>
+                            <option value="snacks">Snacks</option>
+                            <option value="dinner">Dinner</option>
+                        </select>
+                        <select id="reviewRatingFilter" onchange="filterReviews()">
+                            <option value="all">All Ratings</option>
+                            <option value="5">5 Stars</option>
+                            <option value="4">4 Stars</option>
+                            <option value="3">3 Stars</option>
+                            <option value="2">2 Stars</option>
+                            <option value="1">1 Star</option>
+                        </select>
+                    </div>
+                    <div id="reviewsList" class="feedback-list">
+                        <p class="no-data">No reviews yet</p>
+                    </div>
+                </div>
+
+                <!-- Complaints Tab -->
+                <div id="complaintsTab" class="feedback-content" style="display: none;">
+                    <div class="filter-section">
+                        <select id="complaintStatusFilter" onchange="filterComplaints()">
+                            <option value="all">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="in_progress">In Progress</option>
+                            <option value="resolved">Resolved</option>
+                        </select>
+                        <select id="complaintMealFilter" onchange="filterComplaints()">
+                            <option value="all">All Meals</option>
+                            <option value="breakfast">Breakfast</option>
+                            <option value="lunch">Lunch</option>
+                            <option value="snacks">Snacks</option>
+                            <option value="dinner">Dinner</option>
+                        </select>
+                    </div>
+                    <div id="complaintsList" class="feedback-list">
+                        <p class="no-data">No complaints yet</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hostel Breakdown -->
+            <div class="card hostel-card">
+                <h3>Hostel-wise Breakdown</h3>
+                <div id="hostelBreakdown" class="hostel-grid">
+                    <p class="no-data">Loading hostel data...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Complaint Detail Modal -->
+    <div id="complaintModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Complaint Details</h2>
+            <div id="complaintDetails"></div>
+            <div class="modal-actions">
+                <button class="action-btn resolve-btn" onclick="resolveComplaint()">Mark as Resolved</button>
+                <button class="action-btn close-btn" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/admin-dashboard.js"></script>
+    <script src="js/operations-reports.js"></script>
+    <script src="js/global-search.js"></script>
+    <script src="js/activity-report.js"></script>
+    <script src="js/push-notifications.js"></script>
+</body>
+</html>

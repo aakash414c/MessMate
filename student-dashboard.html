@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - MessMate</title>
+    <link rel="stylesheet" href="./css/student-dashboard.css">
+    <link rel="stylesheet" href="./css/global-search.css">
+    <link rel="stylesheet" href="./css/brand-polish.css">
+        <!-- <link rel="stylesheet" href="./css/style.css"> -->
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-content">
+                <img src="./assets/messmate-mark.svg" alt="MessMate" class="header-logo">
+                <div class="header-text">
+                    <h1>MessMate</h1>
+                    <p>Plan your meals, manage your mess</p>
+                </div>
+            </div>
+            <div class="header-actions"><button class="push-subscribe-btn" id="pushSubscribeButton" type="button" disabled>Enable alerts</button><span class="push-subscribe-status" id="pushSubscribeStatus" role="status" aria-live="polite">Checking notification support…</span><button class="logout-btn" onclick="logout()">Logout</button></div>
+        </header>
+        <details class="global-search-panel"><summary>Search MessMate</summary><p class="global-search-help">Search menus, current announcements, your bookings, your complaints, and your payment records. Results are limited to your account.</p><form id="globalSearchForm" class="global-search-form"><input id="globalSearchInput" type="search" minlength="2" maxlength="80" placeholder="Dish, notice, booking, complaint…" aria-label="Search your menus, announcements, bookings, complaints, and payments" required><button type="submit">Search</button></form><div id="globalSearchResults" class="global-search-results" role="status"></div></details>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <section class="card" aria-labelledby="announcementsHeading">
+                <h3 id="announcementsHeading">Mess announcements <span class="announcement-unread" id="announcementUnreadCount">0 unread</span></h3>
+                <div id="studentAnnouncements"><p class="no-data">Loading announcements…</p></div>
+            </section>
+            <!-- User Info Card -->
+            <div class="card user-info-card">
+                <h2>Student Dashboard</h2>
+                <div class="info-row">
+                    <span class="info-label">User ID</span>
+                    <span class="info-value" id="userId">Loading...</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Date</span>
+                    <span class="info-value" id="currentDate">Loading...</span>
+                </div>
+            </div>
+
+            <!-- Mess Fee Payment Card -->
+            <div class="card payment-card">
+                <div class="payment-header">
+                    <div>
+                        <h3>Mess Fee Payment</h3>
+                    <p class="payment-subtitle" id="paymentMonth">Loading monthly bill...</p>
+                    <p id="paymentModeNote" class="payment-subtitle" role="note"></p>
+                    </div>
+                    <span class="payment-status pending" id="paymentStatus">Pending</span>
+                </div>
+                <div class="payment-summary">
+                    <div class="payment-amount">
+                        <span class="payment-label">Amount Due</span>
+                        <strong id="paymentAmount">Rs. 0</strong>
+                    </div>
+                    <button class="pay-btn" id="payButton" onclick="payMessFee()">Pay Now</button>
+                </div>
+                <div id="paymentHistory" class="payment-history">
+                    <p class="no-data">No payments yet</p>
+                </div>
+            </div>
+
+            <section class="card wallet-card"><h3>Student wallet</h3><p><span class="muted">Recorded balance</span> <strong id="walletBalance">Rs. 0</strong></p><p id="walletNote" class="payment-subtitle" role="note"></p><button class="action-btn" id="walletPayButton" type="button" onclick="payFeeFromWallet()" disabled>Pay this month’s fee from wallet</button><p id="walletPayHint" class="payment-subtitle" role="status"></p><div id="walletTransactions" class="wallet-transactions"><p class="no-data">Loading wallet…</p></div></section>
+
+            <!-- Mess Attendance Card -->
+            <div class="card attendance-card">
+                <h3>Meal bookings</h3>
+                <p class="attendance-subtitle">Reserve or cancel meals before that meal’s cutoff. You can book up to 14 days ahead.</p>
+                <label for="bookingDate">Booking date</label>
+                <input type="date" id="bookingDate" onchange="bookingDateChanged()">
+                <p id="bookingStatus" role="status" aria-live="polite"></p>
+
+                <!-- Breakfast -->
+                <div class="meal-section">
+                    <div class="meal-header">
+                        <h4>Breakfast</h4>
+                        <div class="meal-actions">
+                            <button class="action-btn" onclick="showReview('breakfast')">Review</button>
+                            <button class="action-btn" onclick="showMenu('breakfast')">MENU</button>
+                            <button class="action-btn qr-pass-btn" onclick="showQrPass('breakfast')">QR pass</button>
+                        </div>
+                    </div>
+                    <div class="meal-attendance">
+                        <button class="attendance-btn yes-btn active" onclick="selectAttendance('breakfast', 'yes')">Reserve</button>
+                        <button class="attendance-btn no-btn" onclick="selectAttendance('breakfast', 'no')">Cancel</button>
+                    </div>
+                    <p class="time-limit" id="breakfastTime">Choosing time till ->7:30AM</p>
+                    <button class="action-btn complaint-btn" onclick="showComplaint('breakfast')">Complaint</button>
+                </div>
+
+                <!-- Lunch -->
+                <div class="meal-section">
+                    <div class="meal-header">
+                        <h4>Lunch</h4>
+                        <div class="meal-actions">
+                            <button class="action-btn" onclick="showReview('lunch')">Review</button>
+                            <button class="action-btn" onclick="showMenu('lunch')">MENU</button>
+                            <button class="action-btn qr-pass-btn" onclick="showQrPass('lunch')">QR pass</button>
+                        </div>
+                    </div>
+                    <div class="meal-attendance">
+                        <button class="attendance-btn yes-btn active" onclick="selectAttendance('lunch', 'yes')">Reserve</button>
+                        <button class="attendance-btn no-btn" onclick="selectAttendance('lunch', 'no')">Cancel</button>
+                    </div>
+                    <p class="time-limit" id="lunchTime">Choosing time till ->10:30AM</p>
+                    <button class="action-btn complaint-btn" onclick="showComplaint('lunch')">Complaint</button>
+                </div>
+
+                <!-- Snacks -->
+                <div class="meal-section">
+                    <div class="meal-header">
+                        <h4>Snacks</h4>
+                        <div class="meal-actions">
+                            <button class="action-btn" onclick="showReview('snacks')">Review</button>
+                            <button class="action-btn" onclick="showMenu('snacks')">MENU</button>
+                            <button class="action-btn qr-pass-btn" onclick="showQrPass('snacks')">QR pass</button>
+                        </div>
+                    </div>
+                    <div class="meal-attendance">
+                        <button class="attendance-btn yes-btn active" onclick="selectAttendance('snacks', 'yes')">Reserve</button>
+                        <button class="attendance-btn no-btn" onclick="selectAttendance('snacks', 'no')">Cancel</button>
+                    </div>
+                    <p class="time-limit" id="snacksTime">Choosing time till ->3:00PM</p>
+                    <button class="action-btn complaint-btn" onclick="showComplaint('snacks')">Complaint</button>
+                </div>
+
+                <!-- Dinner -->
+                <div class="meal-section">
+                    <div class="meal-header">
+                        <h4>Dinner</h4>
+                        <div class="meal-actions">
+                            <button class="action-btn" onclick="showReview('dinner')">Review</button>
+                            <button class="action-btn" onclick="showMenu('dinner')">MENU</button>
+                            <button class="action-btn qr-pass-btn" onclick="showQrPass('dinner')">QR pass</button>
+                        </div>
+                    </div>
+                    <div class="meal-attendance">
+                        <button class="attendance-btn yes-btn active" onclick="selectAttendance('dinner', 'yes')">Reserve</button>
+                        <button class="attendance-btn no-btn" onclick="selectAttendance('dinner', 'no')">Cancel</button>
+                    </div>
+                    <p class="time-limit" id="dinnerTime">Choosing time till ->5:30PM</p>
+                    <button class="action-btn complaint-btn" onclick="showComplaint('dinner')">Complaint</button>
+                </div>
+
+                <!-- Submit Button -->
+                    <button class="submit-btn" onclick="submitAttendance()">Save meal bookings</button>
+            </div>
+            <section class="card" aria-labelledby="myComplaintsHeading">
+                <h3 id="myComplaintsHeading">My complaints</h3>
+                <div id="myComplaints"><p class="no-data">No complaints submitted.</p></div>
+            </section>
+        </main>
+    </div>
+
+    <div id="qrPassModal" class="modal" aria-hidden="true">
+        <div class="modal-content qr-pass-modal" role="dialog" aria-modal="true" aria-labelledby="qrPassTitle">
+            <button class="close" type="button" aria-label="Close QR pass" onclick="closeModal('qrPassModal')">&times;</button>
+            <p class="eyebrow">Today's booked meal</p>
+            <h2 id="qrPassTitle">Meal entry pass</h2>
+            <p id="qrPassDetails" class="payment-subtitle"></p>
+            <img id="qrPassImage" class="qr-pass-image" alt="Short-lived MessMate meal entry QR code">
+            <p id="qrPassCountdown" class="qr-pass-countdown" role="status" aria-live="polite">Preparing pass…</p>
+            <p class="qr-pass-help">Show this code to mess staff. It expires shortly and can only be used once for an active booking.</p>
+            <button class="btn btn-secondary" type="button" onclick="showQrPass(currentQrMeal)">Refresh pass</button>
+        </div>
+    </div>
+
+    <!-- Menu Modal -->
+    <div id="menuModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('menuModal')">&times;</span>
+            <h2 id="menuTitle">Today's Menu</h2>
+            <div id="menuContent" class="menu-content">
+                <p>Loading menu...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Modal -->
+    <div id="reviewModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('reviewModal')">&times;</span>
+            <h2 id="reviewTitle">Submit Review</h2>
+            <form onsubmit="submitReview(event)" class="review-form">
+                <div class="rating-section">
+                    <label>Rating:</label>
+                    <div class="star-rating">
+                        <span class="star" onclick="setRating(1)">★</span>
+                        <span class="star" onclick="setRating(2)">★</span>
+                        <span class="star" onclick="setRating(3)">★</span>
+                        <span class="star" onclick="setRating(4)">★</span>
+                        <span class="star" onclick="setRating(5)">★</span>
+                    </div>
+                </div>
+                <textarea id="reviewText" placeholder="Write your review here..." rows="5" required></textarea>
+                <button type="submit" class="submit-btn">Submit Review</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Complaint Modal -->
+    <div id="complaintModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('complaintModal')">&times;</span>
+            <h2 id="complaintTitle">Submit Complaint</h2>
+            <form onsubmit="submitComplaint(event)" class="complaint-form">
+                <input type="text" id="complaintSubject" placeholder="Subject" required>
+                <textarea id="complaintText" placeholder="Describe your complaint..." rows="5" required></textarea>
+                <label for="complaintImage">Photo attachment (optional)</label>
+                <input type="file" id="complaintImage" accept="image/jpeg,image/png,image/webp">
+                <small class="muted">One JPEG, PNG, or WebP image. MessMate resizes it before submission.</small>
+                <button type="submit" class="submit-btn">Submit Complaint</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="js/student-dashboard.js"></script>
+    <script src="js/global-search.js"></script>
+    <script src="js/push-notifications.js"></script>
+</body>
+</html>

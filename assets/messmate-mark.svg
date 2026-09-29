@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-labelledby="title">
+  <title id="title">MessMate thali mark</title>
+  <circle cx="48" cy="48" r="45" fill="#f8f2e6" stroke="#174b3a" stroke-width="4"/>
+  <circle cx="48" cy="48" r="34" fill="none" stroke="#c8d5c5" stroke-width="2"/>
+  <circle cx="48" cy="49" r="21" fill="#e9a23b"/>
+  <path d="M36 53c8-13 20-14 26-3-7 12-17 15-26 3Z" fill="#b9482d"/>
+  <path d="M41 52c5-5 11-6 17-4M45 48c-3-6-2-11 3-15 5 5 6 10 2 15" fill="none" stroke="#fff3d6" stroke-linecap="round" stroke-width="2.6"/>
+  <path d="M24 29c7 2 11 6 12 12-7 0-12-4-12-12Zm48 0c-7 2-11 6-12 12 7 0 12-4 12-12Z" fill="#4f8a61"/>
+  <path d="M23 67c15 8 35 8 50 0" fill="none" stroke="#174b3a" stroke-linecap="round" stroke-width="3"/>
+</svg>

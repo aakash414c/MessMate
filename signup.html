@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ffffff">
+    <title>Create a student account · MessMate</title>
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/signup.css">
+    <link rel="stylesheet" href="./css/brand-polish.css">
+</head>
+<body class="signup-page">
+    <header class="signup-header">
+        <a class="signup-brand" href="index.html" aria-label="MessMate home">
+            <img src="./assets/messmate-mark.svg" alt="">
+            <span>MessMate</span>
+        </a>
+        <a class="signup-nav-btn" href="index.html">Back to home</a>
+    </header>
+    <main class="signup-main">
+        <section class="signup-card" aria-labelledby="signupTitle">
+            <div class="signup-card-heading">
+                <p class="signup-eyebrow">STUDENT ACCESS</p>
+                <h1 id="signupTitle">Create your account</h1>
+                <p>Use your student ID to join MessMate and start planning meals.</p>
+            </div>
+            <form class="login-form signup-form" onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <label for="signupStudentId">12-digit student ID</label>
+                    <input id="signupStudentId" name="userId" type="text" inputmode="numeric" autocomplete="username" pattern="[0-9]{12}" minlength="12" maxlength="12" placeholder="Example: 240010130009" aria-describedby="studentIdHint" required>
+                    <small id="studentIdHint" class="form-hint">The demo checks the ID format but does not verify it against a campus directory.</small>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input id="signupPassword" name="password" type="password" autocomplete="new-password" minlength="12" maxlength="200" required>
+                    <small class="form-hint">Use at least 12 characters.</small>
+                </div>
+                <div class="form-group">
+                    <label for="signupConfirmPassword">Confirm password</label>
+                    <input id="signupConfirmPassword" name="confirmPassword" type="password" autocomplete="new-password" minlength="12" maxlength="200" required>
+                </div>
+                <p id="signupMessage" class="signup-message" role="status" aria-live="polite"></p>
+                <button id="signupSubmit" type="submit" class="btn btn-primary btn-block">Create student account</button>
+            </form>
+            <p class="signup-role-note">Staff, manager, and administrator accounts are created by an administrator.</p>
+            <p class="signup-login-prompt">Already have an account? <a href="index.html" onclick="sessionStorage.setItem('openStudentLogin', 'true')">Sign in</a></p>
+        </section>
+    </main>
+    <script src="js/auth.js"></script>
+</body>
+</html>

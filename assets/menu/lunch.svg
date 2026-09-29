@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" role="img" aria-labelledby="title desc">
+  <title id="title">Illustrated Indian lunch thali</title><desc id="desc">A thali with dal, rice, roti, vegetables, salad, and curd.</desc>
+  <defs><linearGradient id="bg" x2="0" y2="1"><stop stop-color="#edf8e9"/><stop offset="1" stop-color="#c7e0bf"/></linearGradient><linearGradient id="plate" x2="0" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#e7eae2"/></linearGradient><filter id="shadow" x="-30%" y="-30%" width="160%" height="180%"><feDropShadow dx="0" dy="14" stdDeviation="14" flood-color="#345934" flood-opacity=".19"/></filter></defs>
+  <rect width="960" height="480" rx="32" fill="url(#bg)"/><circle cx="104" cy="388" r="67" fill="#fff" opacity=".3"/><circle cx="857" cy="80" r="45" fill="#fff" opacity=".35"/>
+  <g filter="url(#shadow)"><ellipse cx="478" cy="250" rx="255" ry="172" fill="url(#plate)"/><ellipse cx="478" cy="250" rx="223" ry="143" fill="#ccd4c8"/><ellipse cx="478" cy="250" rx="211" ry="130" fill="#fffaf0"/>
+    <ellipse cx="478" cy="250" rx="81" ry="72" fill="#fff"/><g fill="#f4e4b5"><circle cx="447" cy="226" r="11"/><circle cx="476" cy="215" r="11"/><circle cx="505" cy="230" r="11"/><circle cx="454" cy="255" r="11"/><circle cx="488" cy="251" r="11"/><circle cx="518" cy="263" r="11"/><circle cx="472" cy="282" r="11"/><circle cx="440" cy="278" r="10"/></g>
+    <circle cx="354" cy="206" r="53" fill="#d99336"/><circle cx="354" cy="206" r="41" fill="#f0b94a"/><path d="M329 204q24-25 50 0m-50 14q24-24 50 0" fill="none" stroke="#81512d" stroke-width="4"/>
+    <circle cx="603" cy="205" r="55" fill="#e5c078"/><circle cx="603" cy="205" r="42" fill="#f8e2ad"/><path d="M575 213q29-22 57 0m-46-27q17-13 35 0" fill="none" stroke="#8e6131" stroke-width="4"/>
+    <circle cx="360" cy="309" r="50" fill="#78a65c"/><path d="M329 310l24-20 23 16 19-17m-56 38 26-20 25 14" fill="none" stroke="#f1d08a" stroke-width="9"/>
+    <circle cx="596" cy="308" r="49" fill="#f4f0db"/><circle cx="596" cy="308" r="38" fill="#fff"/><path d="M574 307q22-13 44 1" fill="none" stroke="#77a46c" stroke-width="6"/>
+    <ellipse cx="479" cy="345" rx="59" ry="25" fill="#d7a14b"/><ellipse cx="479" cy="340" rx="54" ry="21" fill="#f3cd77"/><circle cx="465" cy="338" r="3" fill="#a87137"/><circle cx="492" cy="345" r="3" fill="#a87137"/>
+  </g><g fill="#fff" opacity=".6"><circle cx="119" cy="103" r="7"/><circle cx="153" cy="130" r="4"/><circle cx="819" cy="350" r="6"/><circle cx="780" cy="376" r="4"/></g>
+</svg>
