@@ -66,6 +66,7 @@ Create a `.env` file based on `.env.example` and set values such as:
 | --- | --- | --- |
 | `NODE_ENV` | `development` | Use `production` only on the hosted service. Production startup requires a persistent database and stable QR secret. |
 | `PORT` | `3000` | Web server port |
+| `TZ` | `Asia/Kolkata` | Campus timezone used by server-side booking cutoffs, today's QR validation, and date-based reports. |
 | `MONGODB_URI` | `mongodb://127.0.0.1:27017/messplanner` | MongoDB connection string; required in production. |
 | `DEMO_ACCOUNT_PASSWORD` | `MessMateDemo!2026` | Local seeded-account password; demo accounts are not seeded in production. |
 | `QR_SIGNING_SECRET` | Random per local process | Stable random value with at least 32 bytes in production; do not rotate casually because it invalidates active QR passes. |

@@ -277,6 +277,7 @@ Recorded checks support core workflow and access-control behavior in a local dem
 | Variable | Purpose | Default / note |
 |---|---|---|
 | PORT | HTTP port | 3000 |
+| TZ | Campus timezone | Asia/Kolkata; aligns server booking cutoffs and today's QR date checks with campus-local time. |
 | MONGODB_URI | MongoDB connection | Local messplanner database |
 | DEMO_ACCOUNT_PASSWORD | Newly seeded demo account password | Set a strong private value before startup. |
 | BREAKFAST_CUTOFF | Breakfast cutoff | 07:30 local time |

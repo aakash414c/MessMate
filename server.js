@@ -1,4 +1,5 @@
 require('dotenv').config();
+process.env.TZ = process.env.TZ || 'Asia/Kolkata';
 
 const express = require('express');
 const path = require('path');
@@ -1332,7 +1333,7 @@ app.post('/api/check-ins/qr-pass', requireAuth, requireRole('student'), async (r
         const expiresAt = Date.now() + 90_000;
         const token = signQrPayload({ userId: req.user.userId, date, meal, exp: expiresAt, nonce: crypto.randomBytes(8).toString('hex') });
         const qrText = `MESSMATE_QR|${token}`;
-        const qrDataUrl = await QRCode.toDataURL(qrText, { errorCorrectionLevel: 'M', margin: 1, width: 320 });
+        const qrDataUrl = await QRCode.toDataURL(qrText, { errorCorrectionLevel: 'M', margin: 4, width: 384 });
         res.json({ qrDataUrl, expiresAt, date, meal, expiresInSeconds: 90 });
     } catch (error) { next(error); }
 });
