@@ -13,6 +13,7 @@ let attendanceData = {
     snacks: 'no',
     dinner: 'no'
 };
+let savedMealStatuses = {};
 let menuData = {
     breakfast: '',
     lunch: '',
@@ -348,16 +349,23 @@ function compressComplaintImage(file) {
 
 async function submitAttendance() {
     const date = document.getElementById('bookingDate').value;
-    const meals = Object.entries(attendanceData);
-    const results = await Promise.allSettled(meals.map(([meal, choice]) => api('/api/bookings/me', {
+    const changes = Object.entries(attendanceData).filter(([meal, choice]) =>
+        (savedMealStatuses[meal] === 'booked') !== (choice === 'yes')
+    );
+    const status = document.getElementById('bookingStatus');
+    if (!changes.length) {
+        status.textContent = 'No booking changes to save.';
+        return;
+    }
+
+    const results = await Promise.allSettled(changes.map(([meal, choice]) => api('/api/bookings/me', {
         method: 'PUT',
         body: JSON.stringify({ date, meal, booked: choice === 'yes' })
     })));
     const failures = results.filter(result => result.status === 'rejected');
     await loadBookings();
-    const status = document.getElementById('bookingStatus');
     status.textContent = failures.length
-        ? `${meals.length - failures.length} booking updates saved. ${failures.length} could not be changed: ${failures[0].reason.message}`
+        ? `${changes.length - failures.length} booking changes saved. ${failures.length} could not be changed: ${failures[0].reason.message}`
         : 'Your meal bookings are saved.';
 }
 
@@ -380,6 +388,7 @@ async function loadBookings() {
         const { bookings, cutoffs } = await api('/api/bookings/me');
         const date = document.getElementById('bookingDate').value;
         const saved = Object.fromEntries(bookings.filter(row => row.date === date).map(row => [row.meal, row.status]));
+        savedMealStatuses = saved;
         const isToday = date === localDateKey(new Date());
         qrEligibleMeals = new Set(isToday
             ? Object.entries(saved).filter(([, status]) => status === 'booked').map(([meal]) => meal)
@@ -416,14 +425,14 @@ function updateQrPassButtons(date, saved) {
         const [cutoffHour, cutoffMinute] = String(bookingCutoffs[meal] || '00:00').split(':').map(Number);
         const cutoffPassed = isToday && new Date().getHours() * 60 + new Date().getMinutes() >= cutoffHour * 60 + cutoffMinute;
         button.disabled = !eligible;
-        button.textContent = eligible ? 'QR pass' : !isToday ? 'Today only' : cutoffPassed ? 'No booking' : 'Book first';
+        button.textContent = eligible ? 'QR pass' : !isToday ? 'Today only' : cutoffPassed ? 'No booking' : 'Save booking first';
         button.title = eligible
             ? `Generate a QR pass for today's ${meal} booking.`
             : !isToday
                 ? 'QR passes are only available for bookings on today’s date.'
                 : cutoffPassed
                     ? `No ${meal} booking was saved before the ${bookingCutoffs[meal]} cutoff.`
-                    : `Reserve and save ${meal} today to generate a QR pass.`;
+                    : `Select Reserve for ${meal}, then save your meal bookings to generate a QR pass.`;
         button.setAttribute('aria-label', button.title);
     });
 }

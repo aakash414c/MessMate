@@ -498,42 +498,15 @@ select {
     background: var(--primary-dark);
 }
 
-/* Hostel Card */
-.hostel-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-}
-
-.hostel-item {
-    background: var(--bg-light);
-    padding: 1.5rem;
-    border-radius: 10px;
-}
-
-.hostel-name {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text-dark);
-    margin-bottom: 1rem;
-}
-
-.hostel-stats {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.hostel-stat-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid var(--bg-gray);
-}
-
-.hostel-stat-row:last-child {
-    border-bottom: none;
-}
+.attendance-summary-card > .muted { margin: -.45rem 0 1rem; }
+.attendance-summary-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .75rem; }
+.attendance-summary-item { min-width: 0; padding: 1rem; border: 1px solid #e5eae7; border-radius: 10px; background: #fbfcfa; }
+.attendance-summary-item h4 { margin-bottom: .8rem; color: var(--text-dark); }
+.attendance-summary-values { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
+.attendance-summary-values span, .attendance-summary-values strong { display: block; }
+.attendance-summary-values span { color: var(--text-light); font-size: .8rem; }
+.attendance-summary-values strong { margin-top: .15rem; color: var(--primary-dark); font-size: 1.35rem; }
+.attendance-summary-item > p { margin-top: .65rem; color: var(--text-light); font-size: .85rem; }
 
 .no-data {
     text-align: center;
@@ -737,7 +710,6 @@ select {
     .overview-item,
     .review-item,
     .complaint-item,
-    .hostel-item,
     #complaintDetails {
         padding: 1rem;
     }
@@ -794,8 +766,8 @@ select {
         gap: 0.25rem;
     }
 
-    .hostel-grid {
-        grid-template-columns: 1fr;
+    .attendance-summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .modal {

@@ -69,7 +69,7 @@ async function refreshData() {
         updateOverview(),
         loadPayments(),
         loadFeedback(),
-        loadHostelBreakdown(),
+        loadAttendanceSummary(),
         loadUsers()
     ]);
 }
@@ -409,50 +409,25 @@ window.onclick = function(event) {
     }
 };
 
-async function loadHostelBreakdown() {
+async function loadAttendanceSummary() {
+    const container = document.getElementById('attendanceSummary');
+    if (!container) return;
+
     try {
-        const data = await api('/api/dashboard/hostels');
-        displayHostelBreakdown(data.hostels);
+        const data = await api('/api/dashboard/check-ins');
+        const mealNames = { breakfast: 'Breakfast', lunch: 'Lunch', snacks: 'Snacks', dinner: 'Dinner' };
+        container.innerHTML = data.meals.map(({ meal, booked, checkedIn, remaining }) => `
+            <article class="attendance-summary-item">
+                <h4>${mealNames[meal] || escapeHtml(meal)}</h4>
+                <div class="attendance-summary-values">
+                    <div><span>Booked</span><strong>${booked}</strong></div>
+                    <div><span>Checked in</span><strong>${checkedIn}</strong></div>
+                </div>
+                <p>${remaining} remaining</p>
+            </article>`).join('');
     } catch (error) {
-        console.error(error);
+        container.textContent = error.message;
     }
-}
-
-function displayHostelBreakdown(data) {
-    const container = document.getElementById('hostelBreakdown');
-
-    if (Object.keys(data).length === 0) {
-        container.innerHTML = '<p class="no-data">No hostel data available</p>';
-        return;
-    }
-
-    container.innerHTML = Object.entries(data).map(([hostel, stats]) => `
-        <div class="hostel-item">
-            <div class="hostel-name">${hostel.toUpperCase()}</div>
-            <div class="hostel-stats">
-                <div class="hostel-stat-row">
-                    <span>Total Students:</span>
-                    <strong>${stats.total}</strong>
-                </div>
-                <div class="hostel-stat-row">
-                    <span>Breakfast:</span>
-                    <strong>${stats.breakfast}</strong>
-                </div>
-                <div class="hostel-stat-row">
-                    <span>Lunch:</span>
-                    <strong>${stats.lunch}</strong>
-                </div>
-                <div class="hostel-stat-row">
-                    <span>Snacks:</span>
-                    <strong>${stats.snacks || 0}</strong>
-                </div>
-                <div class="hostel-stat-row">
-                    <span>Dinner:</span>
-                    <strong>${stats.dinner}</strong>
-                </div>
-            </div>
-        </div>
-    `).join('');
 }
 
 function formatDateTime(timestamp) {

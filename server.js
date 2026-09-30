@@ -1874,6 +1874,37 @@ app.get('/api/dashboard/hostels', requireAuth, requireRole('admin'), async (req,
     }
 });
 
+app.get('/api/dashboard/check-ins', requireAuth, requireRole('admin'), async (req, res, next) => {
+    try {
+        const date = todayString();
+        const [bookingRows, checkInRows] = await Promise.all([
+            Booking.aggregate([
+                { $match: { date, status: 'booked' } },
+                { $group: { _id: '$meal', count: { $sum: 1 } } }
+            ]),
+            CheckIn.aggregate([
+                { $match: { date } },
+                { $group: { _id: '$meal', count: { $sum: 1 } } }
+            ])
+        ]);
+        const countsByMeal = rows => Object.fromEntries(rows.map(row => [row._id, row.count]));
+        const bookings = countsByMeal(bookingRows);
+        const checkIns = countsByMeal(checkInRows);
+
+        res.json({
+            date,
+            meals: ['breakfast', 'lunch', 'snacks', 'dinner'].map(meal => ({
+                meal,
+                booked: bookings[meal] || 0,
+                checkedIn: checkIns[meal] || 0,
+                remaining: Math.max(0, (bookings[meal] || 0) - (checkIns[meal] || 0))
+            }))
+        });
+    } catch (error) {
+        next(error);
+    }
+});
+
 app.get('/api/payments/me', requireAuth, requireRole('student'), async (req, res, next) => {
     try {
         const month = currentMonthKey();
